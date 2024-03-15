@@ -1,3 +1,4 @@
+import { login } from '@/actions';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -15,7 +16,7 @@ const LoginTitle = styled.h2`
   text-align: center;
 `;
 
-const LoginForm = styled.form`
+const LoginFormStyle = styled.form`
   background-color: #fff;
   border-radius: 8px;
   padding: 30px;
@@ -57,7 +58,7 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const LoginPage = () => {
+const LoginForm = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Implement your login logic here
@@ -65,7 +66,7 @@ const LoginPage = () => {
 
   return (
     <LoginPageContainer>
-      <LoginForm onSubmit={handleSubmit}>
+      <LoginFormStyle action={login}>
         <LoginTitle>Login</LoginTitle>
         <FormGroup>
           <Label htmlFor="email">Email:</Label>
@@ -76,9 +77,9 @@ const LoginPage = () => {
           <Input type="password" id="password" name="password" required />
         </FormGroup>
         <LeftButton><Button type="submit">Login</Button></LeftButton>
-      </LoginForm>
+      </LoginFormStyle>
     </LoginPageContainer>
   );
 };
 
-export default LoginPage;
+export default LoginForm;
