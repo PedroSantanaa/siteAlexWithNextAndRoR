@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import React from 'react'
 import Logout from './Logout'
+import { getSession } from '@/actions'
 
-const NavBar = () => {
+const NavBar = async () => {
+  const session = await getSession()
   return (
     <nav>
       <Link href='/'>Login</Link>
