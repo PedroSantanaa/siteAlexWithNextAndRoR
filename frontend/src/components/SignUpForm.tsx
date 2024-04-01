@@ -1,24 +1,24 @@
 "use client"
-import { login } from '@/actions';
+import { signup } from '@/actions';
 import React from 'react';
 import { useFormState } from 'react-dom';
 import styled from 'styled-components';
 
-const LoginPageContainer = styled.div`
+const SignupPageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 `;
 
-const LoginTitle = styled.h2`
+const SignUpTitle = styled.h2`
   color: black;
   font-size: 24px;
   margin-bottom: 20px;
   text-align: center;
 `;
 
-const LoginFormStyle = styled.form`
+const SignupFormStyle = styled.form`
   background-color: #fff;
   border-radius: 8px;
   padding: 30px;
@@ -66,13 +66,17 @@ const Error = styled.p`
   text-align: center;
 `;
 
-const LoginForm = () => {
- const [state,formAction] = useFormState<any,FormData>(login,undefined) 
+const SignUpForm = () => {
+ const [state,formAction] = useFormState<any,FormData>(signup,undefined) 
 
   return (
-    <LoginPageContainer>
-      <LoginFormStyle action={formAction}>
-        <LoginTitle>Login</LoginTitle>
+    <SignupPageContainer>
+      <SignupFormStyle action={formAction}>
+        <SignUpTitle>Cadastro</SignUpTitle>
+        <FormGroup>
+        <Label htmlFor="name">Nome:</Label>
+        <Input type="text" id="name" name="name" required />
+        </FormGroup>
         <FormGroup>
           <Label htmlFor="email">Email:</Label>
           <Input type="email" id="email" name="email" required />
@@ -81,11 +85,11 @@ const LoginForm = () => {
           <Label htmlFor="password">Senha:</Label>
           <Input type="password" id="password" name="password" required />
         </FormGroup>
-        <LeftButton><Button type="submit">Login</Button></LeftButton>
+        <LeftButton><Button type="submit">Cadastar</Button></LeftButton>
         {state?.error && <Error>{state.error}</Error>}
-      </LoginFormStyle>
-    </LoginPageContainer>
+      </SignupFormStyle>
+    </SignupPageContainer>
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

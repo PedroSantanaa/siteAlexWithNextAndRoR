@@ -87,6 +87,32 @@ export const login =  async (prevState:{error:undefined | string},formData: Form
 
 }
 
+export const signup =  async (prevState:{error:undefined | string},formData: FormData) => {
+  const formName = formData.get('name') as string
+  const formEmail = formData.get('email') as string
+  const formPassword = formData.get('password') as string
+  
+  const requestData = {
+    "user":{
+      "name": formName,
+      "email": formEmail,
+      "password": formPassword
+    }
+  }
+
+ try {
+    await apiInstance.post('/signup', requestData)
+    redirect('/')
+
+        // Agora você pode usar o token JWT como necessário
+        // console.log('Token JWT:', tokenJWT);
+  }
+   catch (error:any) {
+      // Tratar outros erros de requisição
+      return { error: 'An error occurred while processing your request.' }
+    }
+  }
+
 export const logout =  async () => {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions)
   session.destroy()
