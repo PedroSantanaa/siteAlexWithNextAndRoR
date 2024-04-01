@@ -1,5 +1,7 @@
+"use client"
 import { login } from '@/actions';
 import React from 'react';
+import { useFormState } from 'react-dom';
 import styled from 'styled-components';
 
 const LoginPageContainer = styled.div`
@@ -59,14 +61,11 @@ const Button = styled.button`
 `;
 
 const LoginForm = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Implement your login logic here
-  };
+ const [state,formAction] = useFormState<any,FormData>(login,undefined) 
 
   return (
     <LoginPageContainer>
-      <LoginFormStyle action={login}>
+      <LoginFormStyle action={formAction}>
         <LoginTitle>Login</LoginTitle>
         <FormGroup>
           <Label htmlFor="email">Email:</Label>
@@ -77,6 +76,7 @@ const LoginForm = () => {
           <Input type="password" id="password" name="password" required />
         </FormGroup>
         <LeftButton><Button type="submit">Login</Button></LeftButton>
+        {state?.error && <p>{state.error}</p>}
       </LoginFormStyle>
     </LoginPageContainer>
   );

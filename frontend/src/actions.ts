@@ -4,7 +4,6 @@ import { sessionOptions } from "./lib"
 import { cookies } from "next/headers"
 import apiInstance from "./utils/axios"
 import { redirect } from "next/navigation"
-import { AxiosResponse } from "axios"
 
 interface Response {
   headers: Headers;
@@ -45,7 +44,7 @@ export const getSession =  async () => {
   });
 }
 
-export const login =  async (formData: FormData) => {
+export const login =  async (prevState:{error:undefined | string},formData: FormData) => {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions)
   const formEmail = formData.get('email') as string
   const formPassword = formData.get('password') as string
@@ -57,25 +56,34 @@ export const login =  async (formData: FormData) => {
     }
   }
 
-  const response:Response = await apiInstance.post('/login', requestData)
-  if (response.headers && response.headers.get('Authorization') && response.status === 200) {
-    const authorizationHeader: string | null = response.headers.get('Authorization');
-    if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
-    // Extrai o token JWT removendo 'Bearer ' do início do valor do cabeçalho
-    const tokenJWT: string = authorizationHeader.substring(7);
-    if (Object.keys(session).length === 0) {
-      session.jwt_session = tokenJWT
-      await session.save()
-    }
-    redirect('/meus-projetos')
+ try {
+    const response: Response = await apiInstance.post('/login', requestData)
 
-    // Agora você pode usar o token JWT como necessário
-    console.log('Token JWT:', tokenJWT);
-  }else{
-    return {error: 'Invalid credentials'}
+    if (response.headers && response.status === 200 && response.headers.get('Authorization')) {
+      const authorizationHeader: string | null = response.headers.get('Authorization');
+      if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
+        // Extrai o token JWT removendo 'Bearer ' do início do valor do cabeçalho
+        const tokenJWT: string = authorizationHeader.substring(7);
+        if (Object.keys(session).length === 0) {
+          session.jwt_session = tokenJWT
+          await session.save()
+        }
+        redirect('/meus-projetos')
+
+        // Agora você pode usar o token JWT como necessário
+        // console.log('Token JWT:', tokenJWT);
+      }
+    } else {
+      return { error: 'Invalid credentials' }
+    }
+  } catch (error:any) {
+    if (error.response && error.response.status === 401) {
+      return { error: 'Email ou Senha incorretos' }
+    } else {
+      // Tratar outros erros de requisição
+      return { error: 'An error occurred while processing your request.' }
+    }
   }
-  }else{
-  return {error: 'Invalid credentials'}}
 
 }
 
