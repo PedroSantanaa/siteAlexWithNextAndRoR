@@ -62,7 +62,13 @@ const Button = styled.button`
 
 const Error = styled.p`
   color: red;
-  font-size: 20px;
+  font-size: 16px;
+  text-align: center;
+`;
+
+const Success = styled.p`
+  color: green;
+  font-size: 16px;
   text-align: center;
 `;
 
@@ -87,6 +93,7 @@ const SignUpForm = () => {
         </FormGroup>
         <LeftButton><Button type="submit">Cadastar</Button></LeftButton>
         {state?.error && <Error>{state.error}</Error>}
+        {state?.success && <Success>{state.success}</Success>}
       </SignupFormStyle>
     </SignupPageContainer>
   );

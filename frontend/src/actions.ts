@@ -87,7 +87,7 @@ export const login =  async (prevState:{error:undefined | string},formData: Form
 
 }
 
-export const signup =  async (prevState:{error:undefined | string},formData: FormData) => {
+export const signup =  async (prevState:{error:undefined | string,success:undefined | string},formData: FormData) => {
   const formName = formData.get('name') as string
   const formEmail = formData.get('email') as string
   const formPassword = formData.get('password') as string
@@ -101,15 +101,18 @@ export const signup =  async (prevState:{error:undefined | string},formData: For
   }
 
  try {
-    await apiInstance.post('/signup', requestData)
-    redirect('/')
+    const response: Response = await apiInstance.post('/signup', requestData)
+    if (response.headers && response.status === 200) {
+      return { success: 'Cadastro realizado com sucesso' }
+  }
+
 
         // Agora você pode usar o token JWT como necessário
         // console.log('Token JWT:', tokenJWT);
   }
    catch (error:any) {
-      // Tratar outros erros de requisição
-      return { error: 'An error occurred while processing your request.' }
+    if (error.response) {
+      return { error: 'Um erro ocorreu ao tentar fazer o cadastro, tente novamente' }}
     }
   }
 
