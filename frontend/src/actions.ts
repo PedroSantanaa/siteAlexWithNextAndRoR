@@ -19,7 +19,7 @@ interface Response {
 
 // }
 
-interface SessionData {
+export interface SessionData {
   jwt_session: string;}
 
 export const getSession =  async () => {
@@ -79,9 +79,9 @@ export const login =  async (prevState:{error:undefined | string},formData: Form
   } catch (error:any) {
     if (error.response && error.response.status === 401) {
       return { error: 'Email ou Senha incorretos' }
-    } else {
+    } else if (error.response) {
       // Tratar outros erros de requisição
-      return { error: 'An error occurred while processing your request.' }
+      return { error: 'Ocorreu um erro, tente novamente em instantes' }
     }
   }
 

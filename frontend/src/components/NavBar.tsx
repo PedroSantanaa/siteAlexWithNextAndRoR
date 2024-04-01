@@ -1,17 +1,17 @@
 import Link from 'next/link'
 import React from 'react'
 import LogoutForm from './LogoutForm'
-import { getSession } from "@/getSession"
+import { getSession } from "@/actions"
 
 const NavBar = async () => {
   const session = await getSession()
   return (
     <nav>
-      <Link href='/'>Login</Link>
-      <Link href='cadastro'>Cadastro</Link>
-      <Link href='perfil'>Perfil</Link>
-      <Link href='novo-projeto'>Novo Projeto</Link>
-      <Link href='meus-projetos'>Meus Projetos</Link>
+      {session == false && <Link href='/'>Login</Link>}
+      {session == false && <Link href='cadastro'>Cadastro</Link>}
+      {session!=false && <Link href='perfil'>Perfil</Link>}
+      {session!=false && <Link href='novo-projeto'>Novo Projeto</Link>}
+      {session!=false && <Link href='meus-projetos'>Meus Projetos</Link>}
       {session!=false && <LogoutForm />}
     </nav>
 
