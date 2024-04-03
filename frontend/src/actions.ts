@@ -44,6 +44,18 @@ export const getSession =  async () => {
   });
 }
 
+export const getJwt =  async () => {
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions)
+
+  // const tokenJWT = session.jwt_session;
+  if (Object.keys(session).length === 0) {
+    return false
+  }
+  
+  return session.jwt_session
+  
+}
+
 export const login =  async (prevState:{error:undefined | string},formData: FormData) => {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions)
   const formEmail = formData.get('email') as string
@@ -74,7 +86,7 @@ export const login =  async (prevState:{error:undefined | string},formData: Form
         // console.log('Token JWT:', tokenJWT);
       }
     } else {
-      return { error: 'Invalid credentials' }
+      return { error: 'Email ou Senha incorretos' }
     }
   } catch (error:any) {
     if (error.response && error.response.status === 401) {
