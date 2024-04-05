@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :companies
   resources :categories
   resources :projects
   get '/current_user', to: 'current_user#index'
