@@ -1,20 +1,43 @@
-import Link from 'next/link'
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import LogoutForm from './LogoutForm'
 import { getSession } from "@/actions"
+import { NavBarContainer, NavbarStyled, NavbarLinkStyled, NavBarContent } from '@/app/styled-components/NavbarStyled'
+import Link from 'next/link'
+import { usePathname} from 'next/navigation'
 
-const NavBar = async () => {
-  const session = await getSession()
+interface SessionData {
+  jwt: string;
+}
+
+const NavBar = () => {
+  const [session, setSession] = useState<SessionData | false | null >(null);
+  const path = usePathname();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const sessionData = await getSession();
+      if (sessionData !== undefined) {
+        setSession(sessionData);
+      }
+    };
+    fetchSession();
+  }, []);
   return (
-    <nav>
-      {session == false && <Link href='/'>Login</Link>}
-      {session == false && <Link href='cadastro'>Cadastro</Link>}
-      {session!=false && <Link href='perfil'>Perfil</Link>}
-      {session!=false && <Link href='novo-projeto'>Novo Projeto</Link>}
-      {session!=false && <Link href='meus-projetos'>Meus Projetos</Link>}
-      {session!=false && <LogoutForm />}
-    </nav>
-
+    <NavBarContainer>
+      <NavBarContent>
+        <h1>Icone de diminuir menu</h1>
+        <h1>Logo</h1>
+      </NavBarContent>
+      <NavbarStyled>
+        {session == false && <NavbarLinkStyled href='/' router={path === '/'}> Login </NavbarLinkStyled>}
+        {session == false && <NavbarLinkStyled href='cadastro' router={path === '/cadastro'}>Cadastro</NavbarLinkStyled>}
+        {session!=false && <NavbarLinkStyled href='perfil' router={path === '/perfil'}>Perfil</NavbarLinkStyled>}
+        {session!=false && <NavbarLinkStyled href='novo-projeto' router={path === '/novo-projeto'}>Novo Projeto</NavbarLinkStyled>}
+        {session!=false && <NavbarLinkStyled href='meus-projetos' router={path === '/meus-projetos'}>Meus Projetos</NavbarLinkStyled>}
+        {session!=false && <LogoutForm />}
+      </NavbarStyled>
+    </NavBarContainer>  
   )
 }
 

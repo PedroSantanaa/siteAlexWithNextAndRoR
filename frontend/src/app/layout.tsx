@@ -19,9 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <StyledComponentsRegistry >
-        <div className="container">
+        <div className="layoutPageContainer">
           <NavBar/>
-          <div className="content">{children}</div>
+          <div className="layoutPageContent">{children}</div>
         </div>
       </StyledComponentsRegistry>
     </html>
