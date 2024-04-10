@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react'
 import LogoutForm from './LogoutForm'
 import { getSession } from "@/actions"
 import { NavBarContainer, NavbarStyled, NavbarLinkStyled, NavBarContent } from '@/app/styled-components/NavbarStyled'
-import Link from 'next/link'
 import { usePathname} from 'next/navigation'
 
 interface SessionData {
   jwt: string;
+  expires: Date
 }
 
 const NavBar = () => {
@@ -22,7 +22,7 @@ const NavBar = () => {
       }
     };
     fetchSession();
-  }, []);
+  }, [path]);
   return (
     <NavBarContainer>
       <NavBarContent>
@@ -30,11 +30,11 @@ const NavBar = () => {
         <h1>Logo</h1>
       </NavBarContent>
       <NavbarStyled>
-        {session == false && <NavbarLinkStyled href='/' router={path === '/'}> Login </NavbarLinkStyled>}
-        {session == false && <NavbarLinkStyled href='cadastro' router={path === '/cadastro'}>Cadastro</NavbarLinkStyled>}
-        {session!=false && <NavbarLinkStyled href='perfil' router={path === '/perfil'}>Perfil</NavbarLinkStyled>}
-        {session!=false && <NavbarLinkStyled href='novo-projeto' router={path === '/novo-projeto'}>Novo Projeto</NavbarLinkStyled>}
-        {session!=false && <NavbarLinkStyled href='meus-projetos' router={path === '/meus-projetos'}>Meus Projetos</NavbarLinkStyled>}
+        {session == false && <NavbarLinkStyled href='/' $isactive={path === '/'}> Login </NavbarLinkStyled>}
+        {session == false && <NavbarLinkStyled href='cadastro' $isactive={path === '/cadastro'}>Cadastro</NavbarLinkStyled>}
+        {session!=false && <NavbarLinkStyled href='perfil' $isactive={path === '/perfil'}>Perfil</NavbarLinkStyled>}
+        {session!=false && <NavbarLinkStyled href='novo-projeto' $isactive={path === '/novo-projeto'}>Novo Projeto</NavbarLinkStyled>}
+        {session!=false && <NavbarLinkStyled href='meus-projetos' $isactive={path === '/meus-projetos'}>Meus Projetos</NavbarLinkStyled>}
         {session!=false && <LogoutForm />}
       </NavbarStyled>
     </NavBarContainer>  

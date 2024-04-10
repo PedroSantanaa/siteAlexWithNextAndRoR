@@ -20,12 +20,15 @@ interface Response {
 // }
 
 export interface SessionData {
-  jwt_session: string;}
+  jwt_session: string;
+  expires: Date;}
 
 export const getSession =  async () => {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions)
-
-  // const tokenJWT = session.jwt_session;
+  if (session.expires && session.expires < new Date()) {
+    session.destroy()
+    return false
+  }
   if (Object.keys(session).length === 0) {
     return false
   }
@@ -77,7 +80,10 @@ export const login =  async (prevState:{error:undefined | string},formData: Form
         // Extrai o token JWT removendo 'Bearer ' do início do valor do cabeçalho
         const tokenJWT: string = authorizationHeader.substring(7);
         if (Object.keys(session).length === 0) {
+          const jwtExpirationTime = 10 * 24 * 60 * 60; // 10 dias em segundos
+          const expirationDate = new Date(Date.now() + jwtExpirationTime * 1000);
           session.jwt_session = tokenJWT
+          session.expires = expirationDate
           await session.save()
         }
         redirect('/meus-projetos')

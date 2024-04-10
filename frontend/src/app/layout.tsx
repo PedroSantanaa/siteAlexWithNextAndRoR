@@ -17,13 +17,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <StyledComponentsRegistry >
-        <div className="layoutPageContainer">
-          <NavBar/>
-          <div className="layoutPageContent">{children}</div>
-        </div>
-      </StyledComponentsRegistry>
+    <html suppressHydrationWarning lang="en">
+      <body>
+        <StyledComponentsRegistry >
+          <div className="layoutPageContainer">
+            <NavBar/>
+            <div className="layoutPageContent">{children}</div>
+          </div>
+        </StyledComponentsRegistry>
+      </body>
     </html>
   );
 }

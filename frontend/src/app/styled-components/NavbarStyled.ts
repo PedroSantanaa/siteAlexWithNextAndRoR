@@ -20,13 +20,13 @@ export const NavbarStyled = styled.nav`
   align-items: center;
 `;  
 
-export const NavbarLinkStyled = styled.a<{ router?: boolean; }>`
+export const NavbarLinkStyled = styled.a<{ $isactive?: boolean; }>`
   width: 100%;
   color: black;
   text-decoration: none;
   padding: 10px 10px;
   text-align: center;
-  background-color: ${({ router }) => router ? '#ccc' : 'transparent'};
+  background-color: ${({ $isactive }) => $isactive ? '#ccc' : 'transparent'};
   &:hover {
     background-color: #ccc;
   }
