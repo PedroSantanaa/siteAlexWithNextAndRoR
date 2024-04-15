@@ -1,19 +1,18 @@
-'use server';
-
-import { getSession } from "@/actions";
+import { SessionData, getSession } from "@/actions";
 import LoginForm from "@/components/LoginForm";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 
 
-const page = async () =>{
-  const session = await getSession()
+const Login =  async () =>{
+  const session = await getSession(); 
   if (session !== false) {
-    redirect('/meus-projetos')
+   redirect('/meus-projetos')
   }
   return (
     <LoginForm />
  );
 }
 
-export default page
+export default Login

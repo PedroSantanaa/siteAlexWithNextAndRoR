@@ -3,7 +3,7 @@ import { getIronSession } from "iron-session"
 import { sessionOptions } from "./lib"
 import { cookies } from "next/headers"
 import apiInstance from "./utils/axios"
-import { redirect } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 
 interface Response {
   headers: Headers;
@@ -86,7 +86,7 @@ export const login =  async (prevState:{error:undefined | string},formData: Form
           session.expires = expirationDate
           await session.save()
         }
-        redirect('/meus-projetos')
+        // redirect('/meus-projetos')
 
         // Agora você pode usar o token JWT como necessário
         // console.log('Token JWT:', tokenJWT);

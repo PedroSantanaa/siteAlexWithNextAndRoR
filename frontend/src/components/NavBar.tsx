@@ -30,8 +30,8 @@ const NavBar = () => {
         <h1>Logo</h1>
       </NavBarContent>
       <NavbarStyled>
-        {session == false && <NavbarLinkStyled href='/' $isactive={path === '/'}> Login </NavbarLinkStyled>}
-        {session == false && <NavbarLinkStyled href='cadastro' $isactive={path === '/cadastro'}>Cadastro</NavbarLinkStyled>}
+        {/* {session == false && <NavbarLinkStyled href='/' $isactive={path === '/'}> Login </NavbarLinkStyled>}
+        {session == false && <NavbarLinkStyled href='cadastro' $isactive={path === '/cadastro'}>Cadastro</NavbarLinkStyled>} */}
         {session!=false && <NavbarLinkStyled href='perfil' $isactive={path === '/perfil'}>Perfil</NavbarLinkStyled>}
         {session!=false && <NavbarLinkStyled href='novo-projeto' $isactive={path === '/novo-projeto'}>Novo Projeto</NavbarLinkStyled>}
         {session!=false && <NavbarLinkStyled href='meus-projetos' $isactive={path === '/meus-projetos'}>Meus Projetos</NavbarLinkStyled>}
