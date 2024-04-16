@@ -8,7 +8,7 @@ export const LoginPageContainer = styled.div`
 `;
 
 export const LoginTitle = styled.h2`
-  color: black;
+  color: #0a264c;
   font-size: 36px;
   margin-bottom: 10px;
   text-align: center;
@@ -41,7 +41,7 @@ export const Label = styled.label`
 `;
 
 export const Input = styled.input`
-  width: calc(100% - 30px);
+  width: calc(100%);
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -56,7 +56,7 @@ export const LeftButton = styled.div`
 
 export const LoginButton = styled.button`
   padding: 10px;
-  background-color: #007bff;
+  background-color: #0a264c;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -88,7 +88,7 @@ export const SignupText = styled.p`
 export const SignupButton = styled.a`
   padding: 10px;
   color: blue;
-  border: 1px solid blue;
+  border: 1px solid #0a264c;
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
