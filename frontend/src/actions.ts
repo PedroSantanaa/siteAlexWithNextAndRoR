@@ -32,19 +32,16 @@ export const getSession =  async () => {
   if (Object.keys(session).length === 0) {
     return false
   }
-  
-  const userPromise = apiInstance.get('/current_user',{
-    headers: {
-      'Authorization': `Bearer ${session.jwt_session}`
-    }
-  })
-  userPromise.then(response => {
-  // Aqui você pode acessar os dados da resposta
-  return response.data
-  }).catch(error => {
-    // Tratamento de erro
-    return {error: 'Error getting user data'};
-  });
+  try {
+    const response = await apiInstance.get('/current_user', {
+      headers: {
+        'Authorization': `Bearer ${session.jwt_session}`
+      }
+    });
+    return response.data
+  } catch (error:any) {
+      return error.message
+  }
 }
 
 export const getJwt =  async () => {
