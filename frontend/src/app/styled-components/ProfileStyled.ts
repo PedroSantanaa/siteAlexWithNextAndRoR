@@ -32,23 +32,35 @@ export const ProfileHeaderSubtitle = styled.h2`
   color: #6b7280;
 `;
 
-export const ProfileDetails = styled.div`
+export const ProfileDetailsMain = styled.div`
   margin-right: auto;
 `;
 
-export const ProfileDetailsTitle = styled.h3`
-  font-size: 1.2rem;
+export const ProfileDetailsMainText = styled.h3`
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 18px;
   font-weight: bold;
-  color: #0a264c;
+  color: black;
 `;
 
-export const ProfileDetailsSubtitle = styled.p`
-  font-size: 1rem;
-  color: #6b7280;
+export const ProfileDetailsMainSubtitle = styled.p`
+  font-size: 18px;
+  font-weight: 500;
+  color: #080000;
+`;
+
+export const ProfileGridContainer = styled.div`
+  display: grid;
+  grid-template-columns:repeat(2,1fr) ;
+  grid-gap: 10px;
 `;
 
 export const ProfileDetailsText = styled.p`
-  font-size: 1rem;
+  font-size: 0.8rem;
+  border-bottom: 1px dotted #6b7280;
+  margin: 20px 0px;
   color: #374151;
 `;
 
@@ -68,11 +80,19 @@ export const ProfileInfo = styled.div`
   flex-direction: column;
   align-items: flex-start;
 `;
-export const ProfileInfoTitle = styled.h2`
-  font-size: 1.5rem;
+export const ProfileDetailsCategoryText = styled.h3`
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 16px;
   font-weight: bold;
-  color: #0a264c;
-  margin-bottom: 0.5rem;
+  color: black;
+`;
+
+export const ProfileDetailsCategorySubText = styled.p`
+  font-size: 16px;
+  font-weight: 500 ;
+  color: black;
 `;
 
 export const ProfileInfoSubtitle = styled.p`
