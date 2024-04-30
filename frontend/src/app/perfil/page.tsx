@@ -2,14 +2,10 @@
 import React from 'react'
 import { Container } from '../styled-components/GeneralStyle'
 import { EditProfileButton, ProfileContainer, ProfileDetailsCategorySubText, ProfileDetailsCategoryText, ProfileDetailsMain, ProfileDetailsMainSubtitle,  ProfileDetailsMainText,  ProfileDetailsText,  ProfileGridContainer,  ProfileHeader,ProfileHeaderLine,ProfileHeaderSubtitle,ProfileHeaderTitle,ProfileInfo, ProfileInfoSubtitle} from '../styled-components/ProfileStyled'
-import { redirect } from 'next/navigation'
+import { useFetchCurrentUser } from '@/hooks/useFetchCurrentUser'
 
-const page =  () => {
-  // const session = await getSession()
-
-  // if (session === false) {
-  //   redirect('/')
-  // }
+const Profile =  () => {
+  const { currentUser:currentUser, loading, error } = useFetchCurrentUser();
   return (
     <Container>
       <ProfileContainer>
@@ -19,40 +15,45 @@ const page =  () => {
           <ProfileHeaderLine/>
         </ProfileHeader>
           <ProfileDetailsMain>
-            <ProfileDetailsMainText>Email: <ProfileDetailsMainSubtitle>pedro.ferraz01@gmail.com</ProfileDetailsMainSubtitle> </ProfileDetailsMainText>
+            <ProfileDetailsMainText>Email: <ProfileDetailsMainSubtitle>{currentUser?.email}</ProfileDetailsMainSubtitle> </ProfileDetailsMainText>
             <ProfileDetailsMainText>Senha: <ProfileDetailsMainSubtitle>******</ProfileDetailsMainSubtitle></ProfileDetailsMainText>
           </ProfileDetailsMain>
           <ProfileDetailsText>DADOS PESSOAIS</ProfileDetailsText>
           <ProfileGridContainer>
-            <ProfileDetailsCategoryText>Nome: <ProfileDetailsCategorySubText>Pedro Santana</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-            <ProfileDetailsCategoryText>CPF: <ProfileDetailsCategorySubText>056......</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Nome: <ProfileDetailsCategorySubText>{currentUser?.name}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>CPF: <ProfileDetailsCategorySubText>{currentUser?.cpf}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
           </ProfileGridContainer>
           <ProfileDetailsText>DADOS DE CONTATOS</ProfileDetailsText>
           <ProfileGridContainer>
-            <ProfileDetailsCategoryText>Telefone: <ProfileDetailsCategorySubText>(77) 99210-9292</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Telefone: <ProfileDetailsCategorySubText>{currentUser?.telefone}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
           </ProfileGridContainer>
           <ProfileDetailsText>ENDEREÇO</ProfileDetailsText>
           <ProfileGridContainer>
-            <ProfileDetailsCategoryText>CEP: <ProfileDetailsCategorySubText>45028-490</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-            <ProfileDetailsCategoryText>Estado: <ProfileDetailsCategorySubText>Bahia</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-            <ProfileDetailsCategoryText>Rua: <ProfileDetailsCategorySubText>B</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-            <ProfileDetailsCategoryText>Bairro: <ProfileDetailsCategorySubText>Candeias</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-            <ProfileDetailsCategoryText>Cidade: <ProfileDetailsCategorySubText>Vitória da Conquista</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-            <ProfileDetailsCategoryText>Nº: <ProfileDetailsCategorySubText>155</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-            <ProfileDetailsCategoryText>Complemento: <ProfileDetailsCategorySubText>Casa 53</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>CEP: <ProfileDetailsCategorySubText>{currentUser?.cep}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Estado: <ProfileDetailsCategorySubText>{currentUser?.estado}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Rua: <ProfileDetailsCategorySubText>{currentUser?.rua}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Bairro: <ProfileDetailsCategorySubText>{currentUser?.bairro}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Cidade: <ProfileDetailsCategorySubText>{currentUser?.cidade}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Nº: <ProfileDetailsCategorySubText>{currentUser?.numero}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Complemento: <ProfileDetailsCategorySubText>{currentUser?.complemento}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
           </ProfileGridContainer>
           <ProfileDetailsText>DADOS DA EMPRESA</ProfileDetailsText>
-          <ProfileGridContainer>
-            <ProfileDetailsCategoryText>Nome: <ProfileDetailsCategorySubText>Pedro Santana</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-            <ProfileDetailsCategoryText>CPF: <ProfileDetailsCategorySubText>056......</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-          </ProfileGridContainer>
-          <ProfileDetailsText>ENDERAÇO DA EMPRESA</ProfileDetailsText>
           <ProfileGridContainer>
             <ProfileDetailsCategoryText>CNPJ: <ProfileDetailsCategorySubText>-</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
             <ProfileDetailsCategoryText>Nome Fantasia: <ProfileDetailsCategorySubText>0</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
             <ProfileDetailsCategoryText>Razão Social: <ProfileDetailsCategorySubText>056......</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
             <ProfileDetailsCategoryText>Registro Estadual: <ProfileDetailsCategorySubText>056......</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
             <ProfileDetailsCategoryText>Registro Municipal: <ProfileDetailsCategorySubText>056......</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+          </ProfileGridContainer>
+          <ProfileDetailsText>ENDEREÇO DA EMPRESA</ProfileDetailsText>
+          <ProfileGridContainer>
+            <ProfileDetailsCategoryText>CEP: <ProfileDetailsCategorySubText>{currentUser?.cep}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Estado: <ProfileDetailsCategorySubText>{currentUser?.estado}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Rua: <ProfileDetailsCategorySubText>{currentUser?.rua}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Bairro: <ProfileDetailsCategorySubText>{currentUser?.bairro}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Cidade: <ProfileDetailsCategorySubText>{currentUser?.cidade}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Nº: <ProfileDetailsCategorySubText>{currentUser?.numero}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
+            <ProfileDetailsCategoryText>Complemento: <ProfileDetailsCategorySubText>{currentUser?.complemento}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
           </ProfileGridContainer>
           <ProfileDetailsText>CARGO NA EMPRESA</ProfileDetailsText>
           <ProfileGridContainer>
@@ -64,4 +65,4 @@ const page =  () => {
   )
 }
 
-export default page
+export default Profile
