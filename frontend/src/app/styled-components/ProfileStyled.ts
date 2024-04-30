@@ -64,7 +64,7 @@ export const ProfileDetailsText = styled.p`
   color: #374151;
 `;
 
-export const EditProfileButton = styled.button`
+export const EditProfileButton = styled.a`
   background-color: #0a264c;
   color: #fff;
   padding: 0.5rem 1rem;
@@ -73,6 +73,7 @@ export const EditProfileButton = styled.button`
   cursor: pointer;
   font-size: 0.8rem;
   margin-left: auto;
+  text-decoration: none;
 `;
 
 export const ProfileInfo = styled.div`
