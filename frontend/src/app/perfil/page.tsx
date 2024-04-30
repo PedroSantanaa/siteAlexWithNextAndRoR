@@ -2,6 +2,7 @@
 import React from 'react'
 import { Container } from '../styled-components/GeneralStyle'
 import { EditProfileButton, ProfileContainer, ProfileDetailsCategorySubText, ProfileDetailsCategoryText, ProfileDetailsMain, ProfileDetailsMainSubtitle,  ProfileDetailsMainText,  ProfileDetailsText,  ProfileGridContainer,  ProfileHeader,ProfileHeaderLine,ProfileHeaderSubtitle,ProfileHeaderTitle,ProfileInfo, ProfileInfoSubtitle} from '../styled-components/ProfileStyled'
+import { redirect } from 'next/navigation'
 
 const page =  () => {
   // const session = await getSession()
@@ -57,7 +58,7 @@ const page =  () => {
           <ProfileGridContainer>
             <ProfileDetailsCategoryText>Cargo: <ProfileDetailsCategorySubText>Dataops</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
           </ProfileGridContainer>
-          <EditProfileButton>Editar Perfil</EditProfileButton>
+          <EditProfileButton href='/completar-cadastro'>Editar Perfil</EditProfileButton>
       </ProfileContainer>
     </Container> 
   )
