@@ -3,7 +3,7 @@ import { getIronSession } from "iron-session"
 import { sessionOptions } from "./lib"
 import { cookies } from "next/headers"
 import apiInstance from "./utils/axios"
-import { redirect, useRouter } from "next/navigation"
+import { redirect } from "next/navigation"
 
 interface Response {
   headers: Headers;
