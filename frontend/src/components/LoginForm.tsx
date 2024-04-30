@@ -26,7 +26,7 @@ const LoginForm = () => {
         {state?.error && <Error>{state.error}</Error>}
       <SignupContainer>
         <SignupText>Não tem uma conta? Faça seu cadastro</SignupText>
-        <SignupButton>CADASTRAR</SignupButton>
+        <SignupButton href='/cadastro'>CADASTRAR</SignupButton>
       </SignupContainer>
       </LoginFormStyle>
     </LoginPageContainer>
