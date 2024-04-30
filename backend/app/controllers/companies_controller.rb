@@ -1,9 +1,10 @@
 class CompaniesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_company, only: %i[ show update destroy ]
 
   # GET /companies
   def index
-    @companies = Company.all
+    @companies = current_user.company
 
     render json: @companies
   end
@@ -15,7 +16,7 @@ class CompaniesController < ApplicationController
 
   # POST /companies
   def create
-    @company = Company.new(company_params)
+    @company = current_user.build_company(company_params)
 
     if @company.save
       render json: @company, status: :created, location: @company
@@ -41,11 +42,11 @@ class CompaniesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_company
-      @company = Company.find(params[:id])
+      @company = current_user.company.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def company_params
-      params.require(:company).permit(:cnpj, :nome_fantasia, :razao_social, :registro_estadual, :registro_municipal, :cep, :estado, :cidade, :rua, :numero, :bairro, :complemento)
+      params.require(:company).permit(:cnpj, :nome_fantasia, :razao_social, :registro_estadual, :registro_municipal, :cep, :estado, :cidade, :rua, :numero, :bairro, :complemento, :user_id)
     end
 end
