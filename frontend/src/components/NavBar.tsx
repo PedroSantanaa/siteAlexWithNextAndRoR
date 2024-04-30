@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import LogoutForm from './LogoutForm'
 import { getSession } from "@/actions"
-import { NavBarContainer, NavbarStyled, NavbarLinkStyled, NavBarContent } from '@/app/styled-components/NavbarStyled'
+import { NavBarContainer, NavbarStyled, NavbarLinkStyled, NavBarContent, NavBarContentTitle } from '@/app/styled-components/NavbarStyled'
 import { usePathname} from 'next/navigation'
+import Image from 'next/image'
 
 interface SessionData {
   jwt: string;
@@ -26,8 +27,8 @@ const NavBar = () => {
   return (
     <NavBarContainer>
       <NavBarContent>
-        <h1>Icone de diminuir menu</h1>
-        <h1>Logo</h1>
+        <NavBarContentTitle>Abreu Engenharia</NavBarContentTitle>
+        <Image src="/logo_abreu.png" alt="Abreu Engenharia" width={230} height={180} />
       </NavBarContent>
       <NavbarStyled>
         {/* {session == false && <NavbarLinkStyled href='/' $isactive={path === '/'}> Login </NavbarLinkStyled>}

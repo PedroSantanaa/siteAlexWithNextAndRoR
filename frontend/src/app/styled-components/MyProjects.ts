@@ -32,6 +32,7 @@ export const ProjectsListHeader = styled.div`
   margin-bottom: 20px;
 `;
 export const ProjectListHeaderP = styled.p`
+  color: #fca311;
   margin: 0;
 `;
 
