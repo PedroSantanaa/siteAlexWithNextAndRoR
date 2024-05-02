@@ -101,3 +101,18 @@ export const ProfileInfoSubtitle = styled.p`
   color: #6b7280;
   margin-bottom: 2rem;
 `;
+
+export const ProfileButton = styled.button`
+  padding: 10px;
+  background-color: #0a264c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+export const Error = styled.p`
+  color: red;
+  font-size: 20px;
+  text-align: center;
+`;
