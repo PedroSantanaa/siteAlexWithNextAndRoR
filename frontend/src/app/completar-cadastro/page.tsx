@@ -1,10 +1,16 @@
 'use client'
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { FinishSignupFormStyle, FinishSignupPageContainer, FinishSignupSubContainer, FinishSignupSubTitle, FinishSignupTitle,FormGroup, Input, Label } from '../styled-components/CompletarCadastro'
+import { FinishSignupFormStyle, FinishSignupPageContainer, FinishSignupSubContainer, FinishSignupSubTitle, FinishSignupTitle,FormGroup, Input, Label, Error } from '../styled-components/CompletarCadastro'
 import { useFetchCurrentUser } from '@/hooks/useFetchCurrentUser';
+import { useFetchCompany } from '@/hooks/useFetchCompany';
+import { useFormState } from 'react-dom';
+import { userInfo } from '@/actions';
+import { ProfileButton } from '../styled-components/ProfileStyled';
 
 const CompletarCadastro = () => {
+  const [state,formAction] = useFormState<any,FormData>(userInfo,undefined) 
   const { currentUser:currentUser, loading, error } = useFetchCurrentUser();
+  const {company:company} = useFetchCompany(currentUser?.id || 0);
   const [formData, setFormData] = useState({
     cpf: currentUser?.cpf || '',
     phone: currentUser?.telefone || '',
@@ -15,6 +21,20 @@ const CompletarCadastro = () => {
     cidade: currentUser?.cidade || '',
     numero: currentUser?.numero || '',
     complemento: currentUser?.complemento || '',
+  });
+  const [companyData, setCompanyData] = useState({
+    cnpj: company?.cnpj || '',
+    fantasia: company?.nome_fantasia || '',
+    razao: company?.razao_social || '',
+    registro: company?.registro_estadual || '',
+    municipal: company?.registro_municipal || '',
+    cep: company?.cep || '',
+    estado: company?.estado || '',
+    rua: company?.rua || '',
+    bairro: company?.bairro || '',
+    cidade: company?.cidade || '',
+    numero: company?.numero || '',
+    complemento: company?.complemento || '',
   });
 
   useEffect(() => {
@@ -31,7 +51,22 @@ const CompletarCadastro = () => {
       numero: currentUser?.numero || '',
       complemento: currentUser?.complemento || ''
     }));
-  }, [currentUser]);
+    setCompanyData(prevState => ({
+      ...prevState,
+      cnpj: company?.cnpj || '',
+      fantasia: company?.nome_fantasia || '',
+      razao: company?.razao_social || '',
+      registro: company?.registro_estadual || '',
+      municipal: company?.registro_municipal || '',
+      cep: company?.cep || '',
+      estado: company?.estado || '',
+      rua: company?.rua || '',
+      bairro: company?.bairro || '',
+      cidade: company?.cidade || '',
+      numero: company?.numero || '',
+      complemento: company?.complemento || ''
+    }));
+  }, [currentUser,company]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,7 +80,7 @@ const CompletarCadastro = () => {
       <FinishSignupTitle>Complete/Edite o seu cadastro</FinishSignupTitle>
       <FinishSignupSubContainer>
         <FinishSignupSubTitle>Dados Pessoais</FinishSignupSubTitle>
-        <FinishSignupFormStyle action="">
+        <FinishSignupFormStyle action={formAction}>
           <FormGroup>
             <Label htmlFor="cpf">CPF</Label>
             <Input type="text" id="cpf" name="cpf" value={formData.cpf} onChange={handleChange} required />
@@ -82,6 +117,8 @@ const CompletarCadastro = () => {
             <Label htmlFor="complemento">Complemento</Label>
             <Input type="text" id="complemento" name="complemento" value={formData.complemento} onChange={handleChange} required />
           </FormGroup>
+          <ProfileButton type="submit">Salvar</ProfileButton>
+          {state?.error && <Error>{state.error}</Error>}
         </FinishSignupFormStyle>
       </FinishSignupSubContainer>
       <FinishSignupSubContainer>
@@ -89,51 +126,51 @@ const CompletarCadastro = () => {
         <FinishSignupFormStyle action="">
           <FormGroup>
             <Label htmlFor="cnpj">CNPJ</Label>
-            <Input type="text" id="cnpj" name="cnpj" required />
+            <Input type="text" id="cnpj" name="cnpj" value={companyData.cnpj} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="fantasia">Nome Fantasia</Label>
-            <Input type="text" id="fantasia" name="fantasia" required />
+            <Input type="text" id="fantasia" name="fantasia" value={companyData.fantasia} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="razao">Razão Social</Label>
-            <Input type="text" id="razao" name="razao" required />
+            <Input type="text" id="razao" name="razao" value={companyData.razao} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="registro">Registro Estadual</Label>
-            <Input type="text" id="registro" name="registro" required />
+            <Input type="text" id="registro" name="registro" value={companyData.registro} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="municipal">Registro Municipal</Label>
-            <Input type="text" id="municipal" name="municipal" required />
+            <Input type="text" id="municipal" name="municipal" value={companyData.municipal} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="cep">CEP</Label>
-            <Input type="text" id="cep" name="cep" required />
+            <Input type="text" id="cep" name="cep" value={companyData.cep} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="estado">Estado</Label>
-            <Input type="text" id="estado" name="estado" required />
+            <Input type="text" id="estado" name="estado" value={companyData.estado} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="rua">Rua</Label>
-            <Input type="text" id="rua" name="rua" required />
+            <Input type="text" id="rua" name="rua" value={companyData.rua} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="bairro">Bairro</Label>
-            <Input type="text" id="bairro" name="bairro" required />
+            <Input type="text" id="bairro" name="bairro" value={companyData.bairro} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="cidade">Cidade</Label>
-            <Input type="text" id="cidade" name="cidade" required />
+            <Input type="text" id="cidade" name="cidade" value={companyData.cidade} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="numero">Número</Label>
-            <Input type="text" id="numero" name="numero" required />
+            <Input type="text" id="numero" name="numero" value={companyData.numero} onChange={handleChange}required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="complemento">Complemento</Label>
-            <Input type="text" id="complemento" name="complemento" required />
+            <Input type="text" id="complemento" name="complemento" value={companyData.complemento} onChange={handleChange}required />
           </FormGroup>
         </FinishSignupFormStyle>
       </FinishSignupSubContainer>
@@ -142,3 +179,5 @@ const CompletarCadastro = () => {
 }
 
 export default CompletarCadastro
+
+
