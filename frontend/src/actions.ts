@@ -131,6 +131,92 @@ export const signup =  async (prevState:{error:undefined | string,success:undefi
     }
   }
 
+export const userInfo =  async (prevState:{error:undefined | string},formData: FormData) => {
+  const formcpf = formData.get('cpf') as string
+  const formphone = formData.get('phone') as string
+  const formcep = formData.get('cep') as string
+  const formestado = formData.get('estado') as string
+  const formrua = formData.get('rua') as string
+  const formbairro = formData.get('bairro') as string
+  const formcidade = formData.get('cidade') as string
+  const formnumero = formData.get('numero') as string
+  const formcomplemento = formData.get('complemento') as string
+
+  
+  const requestData = {
+    "user":{
+      "cpf": formcpf,
+      "phone": formphone,
+      "cep": formcep,
+      "estado": formestado,
+      "rua": formrua,
+      "bairro": formbairro,
+      "cidade": formcidade,
+      "numero": formnumero,
+      "complemento": formcomplemento
+    }
+  }
+
+ try {
+    await apiInstance.put('/additional_user_data', requestData)
+
+  } catch (error:any) {
+    if (error.response && error.response.status === 401) {
+      return { error: 'Não foi possivel atualizar o usuário, tente novamente em instantes...' }
+    } else if (error.response) {
+      // Tratar outros erros de requisição
+      return { error: 'Ocorreu um erro, tente novamente em instantes' }
+    }
+  }
+
+}
+
+export const companyInfo =  async (prevState:{error:undefined | string},formData: FormData) => {
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions)
+  const formEmail = formData.get('email') as string
+  const formPassword = formData.get('password') as string
+  
+  const requestData = {
+    "user":{
+      "email": formEmail,
+      "password": formPassword
+    }
+  }
+
+ try {
+    const response: Response = await apiInstance.post('/login', requestData)
+
+    if (response.headers && response.status === 200 && response.headers.get('Authorization')) {
+      const authorizationHeader: string | null = response.headers.get('Authorization');
+      if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
+        // Extrai o token JWT removendo 'Bearer ' do início do valor do cabeçalho
+        const tokenJWT: string = authorizationHeader.substring(7);
+        if (Object.keys(session).length === 0) {
+          const jwtExpirationTime = 10 * 24 * 60 * 60; // 10 dias em segundos
+          const expirationDate = new Date(Date.now() + jwtExpirationTime * 1000);
+          session.jwt_session = tokenJWT
+          session.expires = expirationDate
+          await session.save()
+        }
+        // redirect('/meus-projetos')
+
+        // Agora você pode usar o token JWT como necessário
+        // console.log('Token JWT:', tokenJWT);
+      }
+    } else {
+      return { error: 'Email ou Senha incorretos' }
+    }
+  } catch (error:any) {
+    if (error.response && error.response.status === 401) {
+      return { error: 'Email ou Senha incorretos' }
+    } else if (error.response) {
+      // Tratar outros erros de requisição
+      return { error: 'Ocorreu um erro, tente novamente em instantes' }
+    }
+  }
+
+}
+
 export const logout =  async () => {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions)
   session.destroy()
