@@ -25,14 +25,7 @@ export const useFetchProjects = () => {
       const sessionData = await getSession();
       if (sessionData === false) {
         redirect('/');
-      }else{
-        for(var key in sessionData){
-          if(!sessionData[key] || sessionData[key] === null || sessionData[key].trim === ""){
-            redirect('/completar-cadastro')
-          }
-          }
       }
-      
 
       const jwt = await getJwt();
       if (jwt === false) {
