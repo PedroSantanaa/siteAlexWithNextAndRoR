@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const FinishSignupPageContainer = styled.div`
   display: flex;
@@ -30,6 +30,7 @@ export const FinishSignupFormStyle = styled.form`
   display: flex; 
   gap: 20px;
   flex-wrap: wrap ;
+  align-items: center;
   background-color: #fff;
   margin: 0px 20px;
   border-radius: 8px;
@@ -62,6 +63,8 @@ export const LeftButton = styled.div`
 `;
 
 export const FinishSignupButton = styled.button`
+  width: 60px ;
+  height: 40px;
   padding: 10px;
   background-color: #0a264c;
   color: #fff;
@@ -72,6 +75,12 @@ export const FinishSignupButton = styled.button`
 
 export const Error = styled.p`
   color: red;
+  font-size: 20px;
+  text-align: center;
+`;
+
+export const Success = styled.p`
+  color: green;
   font-size: 20px;
   text-align: center;
 `;
@@ -99,4 +108,33 @@ export const SignupButton = styled.a`
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
+`;
+ 
+
+
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const LoadingModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Spinner = styled.div`
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: ${spin} 1s linear infinite;
 `;
