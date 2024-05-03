@@ -22,6 +22,7 @@ export const useFetchProjects = () => {
 
   useEffect(() => {
     async function loadData() {
+      setLoading(true);
       const sessionData = await getSession();
       if (sessionData === false) {
         redirect('/');
@@ -34,7 +35,6 @@ export const useFetchProjects = () => {
         return;
       }
 
-      setLoading(true);
 
       try {
         const response = await apiInstance.get("http://localhost:3001/projects", {
