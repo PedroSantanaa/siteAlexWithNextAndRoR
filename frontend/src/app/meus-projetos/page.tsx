@@ -3,6 +3,7 @@ import React, { ChangeEvent, useEffect, useState} from 'react'
 import { useFetchProjects } from '@/hooks/useFetchProjects';
 import {  FilterSearch, FilterSearchInput, FilterSelectOption, FiltersContainer, FiltersForm, FiltersFormFieldSelect, ProjectListHeaderP, ProjectsList, ProjectsListHeader, ProjectsListHeaderFilterCenter, ProjectsListHeaderFilterLeft, ProjectsListHeaderFilterRight, ProjectsListHeaderFilters, ProjectsListHeaderTitle, ProjectsListProject, ProjectsListProjectHeader } from '../styled-components/MyProjects';
 import { Container, Loading } from '../styled-components/GeneralStyle';
+import LoadingModal from '@/components/Modal';
 
 const MyProjects = () => {
   const { projects:apiData, loading, error } = useFetchProjects();
@@ -33,7 +34,7 @@ const MyProjects = () => {
   });
 
   if (loading) {
-    return <Loading>Loading...</Loading>;
+    return <LoadingModal/>;
   }
 
   if (error) {
