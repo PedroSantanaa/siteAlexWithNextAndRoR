@@ -42,8 +42,8 @@ export const useFetchCurrentUser = () => {
         setLoading(false);
         return;
       }
-
       setCurrentUser(sessionData);
+      setLoading(false);
       
     }
 
