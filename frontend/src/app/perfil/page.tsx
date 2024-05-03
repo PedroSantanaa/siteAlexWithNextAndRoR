@@ -4,12 +4,14 @@ import { Container } from '../styled-components/GeneralStyle'
 import { EditProfileButton, ProfileContainer, ProfileDetailsCategorySubText, ProfileDetailsCategoryText, ProfileDetailsMain, ProfileDetailsMainSubtitle,  ProfileDetailsMainText,  ProfileDetailsText,  ProfileGridContainer,  ProfileHeader,ProfileHeaderLine,ProfileHeaderSubtitle,ProfileHeaderTitle,ProfileInfo, ProfileInfoSubtitle} from '../styled-components/ProfileStyled'
 import { useFetchCurrentUser } from '@/hooks/useFetchCurrentUser'
 import { useFetchCompany } from '@/hooks/useFetchCompany'
+import LoadingModal from '@/components/Modal'
 
 const Profile =  () => {
-  const { currentUser:currentUser, loading, error } = useFetchCurrentUser();
-  const {company:company} = useFetchCompany(currentUser?.id || 0);
+  const { currentUser, loading, error } = useFetchCurrentUser();
+  const {company,loading:loading1,error:error1} = useFetchCompany(currentUser?.id || 0);
   return (
     <Container>
+      {(loading || loading1) && <LoadingModal/>}
       <ProfileContainer>
         <ProfileHeader>
           <ProfileHeaderTitle>CONFIGURAÇÕES</ProfileHeaderTitle>
@@ -56,10 +58,6 @@ const Profile =  () => {
             <ProfileDetailsCategoryText>Cidade: <ProfileDetailsCategorySubText>{company?.cidade}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
             <ProfileDetailsCategoryText>Nº: <ProfileDetailsCategorySubText>{company?.numero}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
             <ProfileDetailsCategoryText>Complemento: <ProfileDetailsCategorySubText>{company?.complemento}</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
-          </ProfileGridContainer>
-          <ProfileDetailsText>CARGO NA EMPRESA</ProfileDetailsText>
-          <ProfileGridContainer>
-            <ProfileDetailsCategoryText>Cargo: <ProfileDetailsCategorySubText>Dataops</ProfileDetailsCategorySubText></ProfileDetailsCategoryText>
           </ProfileGridContainer>
           <EditProfileButton href='/completar-cadastro'>Editar Perfil</EditProfileButton>
       </ProfileContainer>
