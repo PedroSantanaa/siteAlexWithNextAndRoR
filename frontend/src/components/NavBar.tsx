@@ -27,17 +27,17 @@ const NavBar = () => {
   return (
     <NavBarContainer>
       <NavBarContent>
-        <NavBarContentTitle>Abreu Engenharia</NavBarContentTitle>
+        {/* <NavBarContentTitle>Abreu Engenharia</NavBarContentTitle> */}
         <Image src="/logo_abreu.png" alt="Abreu Engenharia" width={230} height={180} />
-      </NavBarContent>
       <NavbarStyled>
         {/* {session == false && <NavbarLinkStyled href='/' $isactive={path === '/'}> Login </NavbarLinkStyled>}
         {session == false && <NavbarLinkStyled href='cadastro' $isactive={path === '/cadastro'}>Cadastro</NavbarLinkStyled>} */}
         {session!=false && <NavbarLinkStyled href='perfil' $isactive={path === '/perfil'}>Perfil</NavbarLinkStyled>}
         {session!=false && <NavbarLinkStyled href='novo-projeto' $isactive={path === '/novo-projeto'}>Novo Projeto</NavbarLinkStyled>}
         {session!=false && <NavbarLinkStyled href='meus-projetos' $isactive={path === '/meus-projetos'}>Meus Projetos</NavbarLinkStyled>}
-        {session!=false && <LogoutForm />}
       </NavbarStyled>
+      </NavBarContent>
+        {session!=false && <LogoutForm />}
     </NavBarContainer>  
   )
 }
