@@ -1,16 +1,17 @@
 'use client'
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { FinishSignupFormStyle, FinishSignupPageContainer, FinishSignupSubContainer, FinishSignupSubTitle, FinishSignupTitle,FormGroup, Input, Label, Error } from '../styled-components/CompletarCadastro'
+import { FinishSignupFormStyle, FinishSignupPageContainer, FinishSignupSubContainer, FinishSignupSubTitle, FinishSignupTitle,FormGroup, Input, Label, Error, FinishSignupButton, Success } from '../styled-components/CompletarCadastro'
 import { useFetchCurrentUser } from '@/hooks/useFetchCurrentUser';
 import { useFetchCompany } from '@/hooks/useFetchCompany';
 import { useFormState } from 'react-dom';
-import { userInfo } from '@/actions';
-import { ProfileButton } from '../styled-components/ProfileStyled';
+import { companyInfo, userInfo } from '@/actions';
+import LoadingModal from '@/components/Modal';
 
 const CompletarCadastro = () => {
   const [state,formAction] = useFormState<any,FormData>(userInfo,undefined) 
-  const { currentUser:currentUser, loading, error } = useFetchCurrentUser();
-  const {company:company} = useFetchCompany(currentUser?.id || 0);
+  const { currentUser, loading, error } = useFetchCurrentUser();
+  const [stateCompany,formActionCompany] = useFormState<any,FormData>(companyInfo,undefined) 
+  const {company,loading:loading1,error:error1} = useFetchCompany(currentUser?.id || 0);
   const [formData, setFormData] = useState({
     cpf: currentUser?.cpf || '',
     phone: currentUser?.telefone || '',
@@ -75,8 +76,17 @@ const CompletarCadastro = () => {
       [name]: value
     }));
   };
+  
+  const handleChangeCompany = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCompanyData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
   return (
     <FinishSignupPageContainer>
+      {(loading || loading1) && <LoadingModal/>}
       <FinishSignupTitle>Complete/Edite o seu cadastro</FinishSignupTitle>
       <FinishSignupSubContainer>
         <FinishSignupSubTitle>Dados Pessoais</FinishSignupSubTitle>
@@ -117,61 +127,65 @@ const CompletarCadastro = () => {
             <Label htmlFor="complemento">Complemento</Label>
             <Input type="text" id="complemento" name="complemento" value={formData.complemento} onChange={handleChange} required />
           </FormGroup>
-          <ProfileButton type="submit">Salvar</ProfileButton>
+          <FinishSignupButton type="submit">Salvar</FinishSignupButton>
           {state?.error && <Error>{state.error}</Error>}
+          {state?.success && <Success>{state.success}</Success>}
         </FinishSignupFormStyle>
       </FinishSignupSubContainer>
       <FinishSignupSubContainer>
         <FinishSignupSubTitle>Dados da Empresa</FinishSignupSubTitle>
-        <FinishSignupFormStyle action="">
+        <FinishSignupFormStyle action={formActionCompany}>
           <FormGroup>
             <Label htmlFor="cnpj">CNPJ</Label>
-            <Input type="text" id="cnpj" name="cnpj" value={companyData.cnpj} onChange={handleChange}required />
+            <Input type="text" id="cnpj" name="cnpj" value={companyData.cnpj} onChange={handleChangeCompany} required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="fantasia">Nome Fantasia</Label>
-            <Input type="text" id="fantasia" name="fantasia" value={companyData.fantasia} onChange={handleChange}required />
+            <Input type="text" id="fantasia" name="fantasia" value={companyData.fantasia} onChange={handleChangeCompany} required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="razao">Razão Social</Label>
-            <Input type="text" id="razao" name="razao" value={companyData.razao} onChange={handleChange}required />
+            <Input type="text" id="razao" name="razao" value={companyData.razao} onChange={handleChangeCompany} required />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="registro">Registro Estadual</Label>
-            <Input type="text" id="registro" name="registro" value={companyData.registro} onChange={handleChange}required />
+            <Input type="text" id="registro" name="registro" value={companyData.registro} onChange={handleChangeCompany} />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="municipal">Registro Municipal</Label>
-            <Input type="text" id="municipal" name="municipal" value={companyData.municipal} onChange={handleChange}required />
+            <Input type="text" id="municipal" name="municipal" value={companyData.municipal} onChange={handleChangeCompany} />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="cep">CEP</Label>
-            <Input type="text" id="cep" name="cep" value={companyData.cep} onChange={handleChange}required />
+            <Input type="text" id="cep" name="cep" value={companyData.cep} onChange={handleChangeCompany} />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="estado">Estado</Label>
-            <Input type="text" id="estado" name="estado" value={companyData.estado} onChange={handleChange}required />
+            <Input type="text" id="estado" name="estado" value={companyData.estado} onChange={handleChangeCompany}/>
           </FormGroup>
           <FormGroup>
             <Label htmlFor="rua">Rua</Label>
-            <Input type="text" id="rua" name="rua" value={companyData.rua} onChange={handleChange}required />
+            <Input type="text" id="rua" name="rua" value={companyData.rua} onChange={handleChangeCompany}/>
           </FormGroup>
           <FormGroup>
             <Label htmlFor="bairro">Bairro</Label>
-            <Input type="text" id="bairro" name="bairro" value={companyData.bairro} onChange={handleChange}required />
+            <Input type="text" id="bairro" name="bairro" value={companyData.bairro} onChange={handleChangeCompany} />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="cidade">Cidade</Label>
-            <Input type="text" id="cidade" name="cidade" value={companyData.cidade} onChange={handleChange}required />
+            <Input type="text" id="cidade" name="cidade" value={companyData.cidade} onChange={handleChangeCompany}/>
           </FormGroup>
           <FormGroup>
             <Label htmlFor="numero">Número</Label>
-            <Input type="text" id="numero" name="numero" value={companyData.numero} onChange={handleChange}required />
+            <Input type="text" id="numero" name="numero" value={companyData.numero} onChange={handleChangeCompany} />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="complemento">Complemento</Label>
-            <Input type="text" id="complemento" name="complemento" value={companyData.complemento} onChange={handleChange}required />
+            <Input type="text" id="complemento" name="complemento" value={companyData.complemento} onChange={handleChangeCompany} />
           </FormGroup>
+          <FinishSignupButton type="submit">Salvar</FinishSignupButton>
+          {stateCompany?.error && <Error>{stateCompany.error}</Error>}
+          {stateCompany?.success && <Success>{stateCompany.success}</Success>}
         </FinishSignupFormStyle>
       </FinishSignupSubContainer>
     </FinishSignupPageContainer>
