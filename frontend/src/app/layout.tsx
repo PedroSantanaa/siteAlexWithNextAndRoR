@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import StyledComponentsRegistry from '../../lib/registry'
 import NavBar from "@/components/NavBar";
@@ -19,7 +19,7 @@ const RootLayout = async ({
 }>) => {
   const session = await getSession(); 
   return (
-    <html suppressHydrationWarning lang="pt-br">
+    <html suppressHydrationWarning lang="pt-br" className={inter.className}>
       <body>
         <StyledComponentsRegistry >
           <div className="layoutPageContainer">
