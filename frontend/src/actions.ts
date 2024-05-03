@@ -131,7 +131,8 @@ export const signup =  async (prevState:{error:undefined | string,success:undefi
     }
   }
 
-export const userInfo =  async (prevState:{error:undefined | string},formData: FormData) => {
+export const userInfo =  async (prevState:{error:undefined | string, success:undefined | string},formData: FormData) => {
+  const jwt = await getJwt()
   const formcpf = formData.get('cpf') as string
   const formphone = formData.get('phone') as string
   const formcep = formData.get('cep') as string
@@ -158,7 +159,14 @@ export const userInfo =  async (prevState:{error:undefined | string},formData: F
   }
 
  try {
-    await apiInstance.put('/additional_user_data', requestData)
+    const response:Response = await apiInstance.put('/additional_user_data', requestData, {
+      headers: {
+        'Authorization': `Bearer ${jwt}`
+      }
+    })
+    if (response.headers && response.status === 200) {
+      return { success: 'Usuário atualizado com sucesso' }
+    }
 
   } catch (error:any) {
     if (error.response && error.response.status === 401) {
@@ -171,44 +179,57 @@ export const userInfo =  async (prevState:{error:undefined | string},formData: F
 
 }
 
-export const companyInfo =  async (prevState:{error:undefined | string},formData: FormData) => {
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions)
-  const formEmail = formData.get('email') as string
-  const formPassword = formData.get('password') as string
+export const companyInfo =  async (prevState:{error:undefined | string, success:undefined | string},formData: FormData) => {
+  const jwt = await getJwt()
+  const session = await getSession()
+  const id = session?.id
+  const formcnpj = formData.get('cnpj') as string
+  const formfantasia = formData.get('fantasia') as string
+  const formrazao = formData.get('razao') as string
+  const formregistro = formData.get('registro') as string
+  const formmunicipal = formData.get('municipal') as string
+  const formcep = formData.get('cep') as string
+  const formestado = formData.get('estado') as string
+  const formrua = formData.get('rua') as string
+  const formbairro = formData.get('bairro') as string
+  const formcidade = formData.get('cidade') as string
+  const formnumero = formData.get('numero') as string
+  const formcomplemento = formData.get('complemento') as string
+
   
-  const requestData = {
-    "user":{
-      "email": formEmail,
-      "password": formPassword
+  const requestDataCompany = {
+    "company":{
+      "cnpj": formcnpj,
+      "nome_fantasia": formfantasia,
+      "razao_social": formrazao,
+      "registro_estadual": formregistro,
+      "registro_municipal": formmunicipal,
+      "cep": formcep,
+      "estado": formestado,
+      "rua": formrua,
+      "bairro": formbairro,
+      "cidade": formcidade,
+      "numero": formnumero,
+      "complemento": formcomplemento
     }
   }
+  
+  
 
  try {
-    const response: Response = await apiInstance.post('/login', requestData)
-
-    if (response.headers && response.status === 200 && response.headers.get('Authorization')) {
-      const authorizationHeader: string | null = response.headers.get('Authorization');
-      if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
-        // Extrai o token JWT removendo 'Bearer ' do início do valor do cabeçalho
-        const tokenJWT: string = authorizationHeader.substring(7);
-        if (Object.keys(session).length === 0) {
-          const jwtExpirationTime = 10 * 24 * 60 * 60; // 10 dias em segundos
-          const expirationDate = new Date(Date.now() + jwtExpirationTime * 1000);
-          session.jwt_session = tokenJWT
-          session.expires = expirationDate
-          await session.save()
-        }
-        // redirect('/meus-projetos')
-
-        // Agora você pode usar o token JWT como necessário
-        // console.log('Token JWT:', tokenJWT);
+    const response:Response = await apiInstance.put(`/companies/${id}`, requestDataCompany,{
+      headers: {
+        'Authorization': `Bearer ${jwt}`
       }
-    } else {
-      return { error: 'Email ou Senha incorretos' }
+    })
+
+    if (response.headers && response.status === 200) {
+      return { success: 'Empresa atualizada com sucesso' }
     }
+
   } catch (error:any) {
     if (error.response && error.response.status === 401) {
-      return { error: 'Email ou Senha incorretos' }
+      return { error: 'Não foi possivel atualizar a empresa, tente novamente em instantes...' }
     } else if (error.response) {
       // Tratar outros erros de requisição
       return { error: 'Ocorreu um erro, tente novamente em instantes' }
