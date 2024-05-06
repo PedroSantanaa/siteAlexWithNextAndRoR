@@ -32,11 +32,13 @@ export const ProjectsListHeader = styled.div`
   margin-bottom: 20px;
 `;
 export const ProjectListHeaderP = styled.p`
+  font-size: 16px;
   color: #fca311;
   margin: 0;
 `;
 
-export const ProjectsListHeaderTitle = styled.h2`
+export const ProjectsListHeaderTitle = styled.h1`
+  color: #0a264c;
   margin: 0;
 `;
 
