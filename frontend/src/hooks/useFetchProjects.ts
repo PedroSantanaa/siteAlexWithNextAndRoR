@@ -1,11 +1,11 @@
 'use client'
-import { useState, useEffect } from "react";
-import apiInstance from "@/utils/axios";
 import dotenv from 'dotenv';
+dotenv.config();
+import { useState, useEffect, useCallback } from "react";
+import apiInstance from "@/utils/axios";
 import { getJwt, getSession } from "@/actions";
 import { redirect } from "next/navigation";
 
-dotenv.config();
 
 interface Project {
   id: number,
@@ -20,39 +20,38 @@ export const useFetchProjects = () => {
   const [error, setError] = useState<string | null >(null);
   const [loading, setLoading] = useState<boolean | null >(null);
 
-  useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      const sessionData = await getSession();
-      if (sessionData === false) {
-        redirect('/');
-      }
-
-      const jwt = await getJwt();
-      if (jwt === false) {
-        setError("Usuário nao atenticado");
-        setLoading(false);
-        return;
-      }
-
-
-      try {
-        const response = await apiInstance.get("http://localhost:3001/projects", {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        });
-
-        setProjects(response.data);
-        setLoading(false);
-      } catch (error:any) {
-        setError(error.message);
-        setLoading(false);
-      }
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    const sessionData = await getSession();
+    if (sessionData === false) {
+      redirect('/');
     }
 
-    loadData();
+    const jwt = await getJwt();
+    if (jwt === false) {
+      setError("Usuário nao atenticado");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await apiInstance.get("http://localhost:3001/projects", {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      setProjects(response.data);
+      setLoading(false);
+    } catch (error: any) {
+      setError(error.message);
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   return { projects, loading, error };
 };
