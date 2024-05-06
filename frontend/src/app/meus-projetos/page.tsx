@@ -44,7 +44,7 @@ const MyProjects = () => {
     <Container>
       <ProjectsList>
         <ProjectsListHeader>
-          <ProjectsListHeaderTitle>Projetos</ProjectsListHeaderTitle>
+          <ProjectsListHeaderTitle>PROJETOS</ProjectsListHeaderTitle>
           <ProjectListHeaderP>Acompanhe seus projetos</ProjectListHeaderP>
           </ProjectsListHeader>
         <FiltersContainer>
