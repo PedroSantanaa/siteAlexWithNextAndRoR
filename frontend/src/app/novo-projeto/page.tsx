@@ -1,16 +1,40 @@
-import { getSession } from '@/actions'
-import { redirect } from 'next/navigation'
+'use client'
+import { useFetchCurrentUser } from '@/hooks/useFetchCurrentUser'
 import React from 'react'
+import { Container } from '../styled-components/GeneralStyle'
+import { NewProjectContainer, NewProjectDetailsText, NewProjectHeader, NewProjectHeaderLine, NewProjectHeaderSubtitle, NewProjectHeaderTitle, NewProjectInfoContainer, NewProjectSection } from '../styled-components/NewProject'
 
-const page = async () => {
-  const session = await getSession()
+const NovoProjeto = () => {
+  const {currentUser, loading, error} = useFetchCurrentUser()
 
-  if (session === false) {
-    redirect('/')
-  }
   return (
-    <div>page</div>
+    <Container>
+      <NewProjectContainer>
+        <NewProjectHeader>
+          <NewProjectHeaderTitle>NOVO PROJETO</NewProjectHeaderTitle>
+          <NewProjectHeaderSubtitle>Crie um novo projeto de forma rápida</NewProjectHeaderSubtitle>
+          <NewProjectHeaderLine/>
+        </NewProjectHeader>
+        <NewProjectInfoContainer>
+          <NewProjectSection>
+            <NewProjectDetailsText>Informações da Concessionária</NewProjectDetailsText>
+          </NewProjectSection>
+          <NewProjectSection>
+            <NewProjectDetailsText>Informações do Cliente</NewProjectDetailsText>
+          </NewProjectSection>
+          <NewProjectSection>
+            <NewProjectDetailsText>Informações da instalação - Unidade geradora</NewProjectDetailsText>
+          </NewProjectSection>
+          <NewProjectSection>
+            <NewProjectDetailsText>Especificações do projeto</NewProjectDetailsText>
+          </NewProjectSection>
+          <NewProjectSection>
+            <NewProjectDetailsText>Documentos complementares (opcional)</NewProjectDetailsText>
+          </NewProjectSection>
+        </NewProjectInfoContainer>
+      </NewProjectContainer>
+    </Container>
   )
 }
 
-export default page
+export default NovoProjeto
