@@ -1,6 +1,6 @@
 'use client'
-import React, { ChangeEvent, useEffect, useState} from 'react'
-import { useFetchProjects } from '@/hooks/useFetchProjects';
+import React, { ChangeEvent, useState} from 'react'
+import { Project, useFetchProjects } from '@/hooks/useFetchProjects';
 import {  FilterSearch, FilterSearchInput, FilterSelectOption, FiltersContainer, FiltersForm, FiltersFormFieldSelect, ProjectListHeaderP, ProjectsList, ProjectsListHeader, ProjectsListHeaderFilterCenter, ProjectsListHeaderFilterLeft, ProjectsListHeaderFilterRight, ProjectsListHeaderFilters, ProjectsListHeaderTitle, ProjectsListProject, ProjectsListProjectHeader } from '../styled-components/MyProjects';
 import { Container, Loading } from '../styled-components/GeneralStyle';
 import LoadingModal from '@/components/Modal';
@@ -88,7 +88,7 @@ const MyProjects = () => {
             </ProjectsListHeaderFilters>
         </FiltersContainer>
         
-        {filteredProjects.map((project) => (
+        {filteredProjects.map((project:Project) => (
           <ProjectsListProject key={project.id}>
             <ProjectsListProjectHeader>{project.name}</ProjectsListProjectHeader>
             <p>Criado em: {project.created_at}</p>

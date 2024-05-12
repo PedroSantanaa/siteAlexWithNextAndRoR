@@ -7,7 +7,7 @@ import { getJwt, getSession } from "@/actions";
 import { redirect } from "next/navigation";
 
 
-interface Project {
+export interface Project {
   id: number,
   name: string,
   created_at: string,
