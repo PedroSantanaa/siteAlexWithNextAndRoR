@@ -25,9 +25,13 @@ import {
   NewProjectDisjuntorContainer,
   NewProjectLatitudeInput,
   NewProjectLongitudeInput,
-  NewProjectLatitudeELongitudeContainer
+  NewProjectLatitudeELongitudeContainer,
+  NewProjectTotalPowerInput,
+  NewProjectFileUploadInput,
+  NewProjectUploadLabel
 } from '../styled-components/NewProject'
 import { ChangeEvent, useState } from 'react'
+import Image from 'next/image'
 
 const NovoProjeto = () => {
   const [typeOfPerson, setTypeOfPerson] = useState('Pessoa Fisica')
@@ -36,6 +40,8 @@ const NovoProjeto = () => {
   const [selectedDisjuntorValue, setSelectedDisjuntorValue] = useState<string>('Valor do disjuntor');
   const [selectedTitularidade, setSelectedTitularidade] = useState<string>('Trocar titularidade?');
   const [selectedMaterial, setSelectedMaterial] = useState<string>('Possui os materiais?');
+  const [fileNameType, setFileNameType] = useState<string>('');
+  const [fileNameCONTRATO, setFileNameCONTRATO] = useState<string>('');
   
   const { currentUser, loading, error } = useFetchCurrentUser()
 
@@ -57,6 +63,20 @@ const NovoProjeto = () => {
 
   const handleMaterialChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedMaterial(e.target.value);
+  };
+
+  const handleFileChangeType = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      setFileNameType(file.name); // Atualiza o estado com o nome do arquivo selecionado
+    }
+  };
+  
+  const handleFileChangeCONTRATO = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      setFileNameCONTRATO(file.name); // Atualiza o estado com o nome do arquivo selecionado
+    }
   };
 
   const states = [
@@ -165,6 +185,19 @@ const NovoProjeto = () => {
               <NewProjectCPFOrCNPJInput type='text' name='numberOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'CPF' : 'CNPJ'} />
               <NewProjectNomeorRazaoSocialInput type='text' name='nameOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'nome' : 'razao social'} />
             </NewProjectCPFOrCNPJContainer>
+            <NewProjectUploadLabel htmlFor='file1'>
+              <Image src={'upload.svg'} alt={'upload'} width={50} height={50} />
+              {fileNameType ? fileNameType : (typeOfPerson === 'Pessoa Fisica' ? 'DOCUMENTO COM FOTO' : 'DOCUMENTO COM FOTO DO REPRESENTANTE')}</NewProjectUploadLabel>
+            <NewProjectFileUploadInput type='file' name='file' id='file1' onChange={handleFileChangeType} />
+            {typeOfPerson === 'Pessoa Juridica' &&  (
+              <>
+                <NewProjectUploadLabel htmlFor='file2'>
+                  <Image src={'upload.svg'} alt={'upload'} width={50} height={50} />
+                  {fileNameCONTRATO ? fileNameCONTRATO : 'Contrato Social'}
+                </NewProjectUploadLabel>
+                <NewProjectFileUploadInput type='file' name='file2' id='file2' onChange={handleFileChangeCONTRATO} />
+              </>
+            )}
           </NewProjectSection>
           <NewProjectSection>
             <NewProjectDetailsText>Informações da instalação - Unidade geradora</NewProjectDetailsText>
@@ -210,7 +243,7 @@ const NovoProjeto = () => {
           </NewProjectSection>
           <NewProjectSection>
             <NewProjectDetailsText>Especificações do projeto</NewProjectDetailsText>
-            <input type="text" placeholder='Potência total do projeto em kWp' />
+            <NewProjectTotalPowerInput type="text" placeholder='Potência total do projeto em kWp' />
             <NewProjectSelectMaterial value={selectedMaterial} onChange={handleMaterialChange}>
               {material.map((material) => (
                 <option

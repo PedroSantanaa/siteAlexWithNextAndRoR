@@ -85,6 +85,7 @@ export const NewProjectCPFOrCNPJContainer = styled.div `
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 10px;
 `;
 
 export const NewProjectCPFOrCNPJInput = styled.input `
@@ -92,6 +93,20 @@ export const NewProjectCPFOrCNPJInput = styled.input `
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+`;
+
+export const NewProjectUploadLabel = styled.label `
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border: 1px dashed #ccc;
+  padding: 20px;
+`;
+
+export const NewProjectFileUploadInput = styled.input `
+  display: none;
 `;
 
 export const NewProjectNomeorRazaoSocialInput = styled.input `
@@ -105,6 +120,7 @@ export const NewProjectDisjuntorContainer = styled.div `
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 10px;
 `;
 
 export const NewProjectSelectDisjuntorType = styled.select `
@@ -125,6 +141,7 @@ export const NewProjectLatitudeELongitudeContainer = styled.div `
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 10px;
 `;
 
 export const NewProjectLatitudeInput = styled.input `
@@ -153,4 +170,12 @@ export const NewProjectSelectMaterial = styled.select `
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+`;
+
+export const NewProjectTotalPowerInput = styled.input `
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
 `;
