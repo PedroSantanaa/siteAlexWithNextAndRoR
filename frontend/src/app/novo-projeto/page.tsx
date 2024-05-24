@@ -1,69 +1,133 @@
 'use client'
 import { useFetchCurrentUser } from '@/hooks/useFetchCurrentUser'
 import { Container } from '../styled-components/GeneralStyle'
-import { NewProjectCPFOrCNPJContainer, NewProjectCPFOrCNPJInput, NewProjectContainer, NewProjectDetailsText, NewProjectSelectDisjuntorValue, NewProjectHeader, NewProjectHeaderLine, NewProjectHeaderSubtitle, NewProjectHeaderTitle, NewProjectInfoContainer, NewProjectInput, NewProjectNomeorRazaoSocialInput, NewProjectSection, NewProjectSelect, NewProjectSelectContainer, NewProjectSelectDisjuntorType, NewProjectSelectTitularidade, NewProjectTypeOfPersonButton, NewProjectTypeOfPersonButtonContainer, NewProjectSelectMaterial, NewProjectDisjuntorContainer, NewProjectLatitudeInput, NewProjectLongitudeInput, NewProjectLatitudeELongitudeContainer } from '../styled-components/NewProject'
-import { useState } from 'react'
+import {
+  NewProjectCPFOrCNPJContainer,
+  NewProjectCPFOrCNPJInput,
+  NewProjectContainer,
+  NewProjectDetailsText,
+  NewProjectSelectDisjuntorValue,
+  NewProjectHeader,
+  NewProjectHeaderLine,
+  NewProjectHeaderSubtitle,
+  NewProjectHeaderTitle,
+  NewProjectInfoContainer,
+  NewProjectInput,
+  NewProjectNomeorRazaoSocialInput,
+  NewProjectSection,
+  NewProjectSelect,
+  NewProjectSelectContainer,
+  NewProjectSelectDisjuntorType,
+  NewProjectSelectTitularidade,
+  NewProjectTypeOfPersonButton,
+  NewProjectTypeOfPersonButtonContainer,
+  NewProjectSelectMaterial,
+  NewProjectDisjuntorContainer,
+  NewProjectLatitudeInput,
+  NewProjectLongitudeInput,
+  NewProjectLatitudeELongitudeContainer
+} from '../styled-components/NewProject'
+import { ChangeEvent, useState } from 'react'
 
 const NovoProjeto = () => {
   const [typeOfPerson, setTypeOfPerson] = useState('Pessoa Fisica')
-  const [selectedState, setSelectedState] = useState('');
-  const {currentUser, loading, error} = useFetchCurrentUser()
+  const [selectedState, setSelectedState] = useState<string>('Estado');
+  const [selectedDisjuntorType, setSelectedDisjuntorType] = useState<string>('Tipo de disjuntor');
+  const [selectedDisjuntorValue, setSelectedDisjuntorValue] = useState<string>('Valor do disjuntor');
+  const [selectedTitularidade, setSelectedTitularidade] = useState<string>('Trocar titularidade?');
+  const [selectedMaterial, setSelectedMaterial] = useState<string>('Possui os materiais?');
+  
+  const { currentUser, loading, error } = useFetchCurrentUser()
+
+  const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedState(e.target.value);
+  };
+
+  const handleDisjuntorTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDisjuntorType(e.target.value);
+  };
+
+  const handleDisjuntorValueChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDisjuntorValue(e.target.value);
+  };
+
+  const handleTitularidadeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedTitularidade(e.target.value);
+  };
+
+  const handleMaterialChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedMaterial(e.target.value);
+  };
+
   const states = [
-  { value: "AC" },
-  { value: "AL" },
-  { value: "AP" },
-  { value: "AM" },
-  { value: "BA" },
-  { value: "CE" },
-  { value: "DF" },
-  { value: "ES" },
-  { value: "GO" },
-  { value: "MA" },
-  { value: "MT" },
-  { value: "MS" },
-  { value: "MG" },
-  { value: "PA" },
-  { value: "PB" },
-  { value: "PR" },
-  { value: "PE" },
-  { value: "PI" },
-  { value: "RJ" },
-  { value: "RN" },
-  { value: "RS" },
-  { value: "RO" },
-  { value: "RR" },
-  { value: "SC" },
-  { value: "SP" },
-  { value: "SE" },
-  { value: "TO" },
-];
+    { value: "Estado" },
+    { value: "AC" },
+    { value: "AL" },
+    { value: "AP" },
+    { value: "AM" },
+    { value: "BA" },
+    { value: "CE" },
+    { value: "DF" },
+    { value: "ES" },
+    { value: "GO" },
+    { value: "MA" },
+    { value: "MT" },
+    { value: "MS" },
+    { value: "MG" },
+    { value: "PA" },
+    { value: "PB" },
+    { value: "PR" },
+    { value: "PE" },
+    { value: "PI" },
+    { value: "RJ" },
+    { value: "RN" },
+    { value: "RS" },
+    { value: "RO" },
+    { value: "RR" },
+    { value: "SC" },
+    { value: "SP" },
+    { value: "SE" },
+    { value: "TO" },
+  ];
+
   const disjuntores = [
-    { value: "Monofásico"},
-    { value: "Bifásico"},
+    {value: "Tipo de disjuntor"},
+    { value: "Monofásico" },
+    { value: "Bifásico" },
     { value: "Trifásico" },
-  ]
+  ];
+
   const valorDoDisjuntores = [
-    { value: "2A"},
-    { value: "4A"},
-    { value: "6A"},
-    { value: "10A"},
-    { value: "16A"},
-    { value: "20A"},
-    { value: "25A"},
-    { value: "32A"},
-    { value: "40A"},
-    { value: "50A"},
-    { value: "63A"},
-    { value: "70A"},
-    { value: "80A"},
-    { value: "100A"},
-    { value: "125A"},
-    { value: "Outro"}
-  ]
+    {value: "Valor do disjuntor"},
+    { value: "2A" },
+    { value: "4A" },
+    { value: "6A" },
+    { value: "10A" },
+    { value: "16A" },
+    { value: "20A" },
+    { value: "25A" },
+    { value: "32A" },
+    { value: "40A" },
+    { value: "50A" },
+    { value: "63A" },
+    { value: "70A" },
+    { value: "80A" },
+    { value: "100A" },
+    { value: "125A" },
+    { value: "Outro" },
+  ];
+
   const titularidade = [
-    { value: "Sim"},
-    { value: "Não"}
-  ]
+    {value: "Trocar titularidade?"},
+    { value: "Sim" },
+    { value: "Não" }
+  ];
+
+  const material = [
+    {value: "Possui os materiais?"},
+    { value: "Sim" },
+    { value: "Não" }
+  ];
 
   return (
     <Container>
@@ -71,19 +135,22 @@ const NovoProjeto = () => {
         <NewProjectHeader>
           <NewProjectHeaderTitle>NOVO PROJETO</NewProjectHeaderTitle>
           <NewProjectHeaderSubtitle>Crie um novo projeto de forma rápida</NewProjectHeaderSubtitle>
-          <NewProjectHeaderLine/>
+          <NewProjectHeaderLine />
         </NewProjectHeader>
         <NewProjectInfoContainer>
           <NewProjectSection>
             <NewProjectDetailsText>Informações da Concessionária</NewProjectDetailsText>
             <NewProjectSelectContainer>
-              <NewProjectSelect value={selectedState} onChange={(e) => setSelectedState(e.target.value)}>
-                <option selected disabled>Estado</option>
+              <NewProjectSelect value={selectedState} onChange={handleStateChange}>
                 {states.map((state) => (
-                  <option key={state.value} value={state.value}>
+                  <option
+                    key={state.value}
+                    value={state.value}
+                    disabled={selectedState !== 'Estado' && state.value === 'Estado'}
+                  >
                     {state.value}
                   </option>
-              ))}
+                ))}
               </NewProjectSelect>
               <NewProjectInput type='text' name='concessionaria' placeholder='Digite a concessionária'></NewProjectInput>
             </NewProjectSelectContainer>
@@ -95,26 +162,31 @@ const NovoProjeto = () => {
               <NewProjectTypeOfPersonButton onClick={() => setTypeOfPerson('Pessoa Juridica')} $isactive={typeOfPerson === 'Pessoa Juridica'}>Pessoa Juridica</NewProjectTypeOfPersonButton>
             </NewProjectTypeOfPersonButtonContainer>
             <NewProjectCPFOrCNPJContainer>
-              <NewProjectCPFOrCNPJInput type='text' name='numberOf' placeholder={ typeOfPerson === 'Pessoa Fisica' ? 'CPF' : 'CNPJ' }/>
-              <NewProjectNomeorRazaoSocialInput type='text' name='nameOf' placeholder={ typeOfPerson === 'Pessoa Fisica' ? 'nome' : 'razao social' }/>
+              <NewProjectCPFOrCNPJInput type='text' name='numberOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'CPF' : 'CNPJ'} />
+              <NewProjectNomeorRazaoSocialInput type='text' name='nameOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'nome' : 'razao social'} />
             </NewProjectCPFOrCNPJContainer>
-            {/* adicionar upload de arquivo */}
           </NewProjectSection>
           <NewProjectSection>
             <NewProjectDetailsText>Informações da instalação - Unidade geradora</NewProjectDetailsText>
             <NewProjectDisjuntorContainer>
-              <NewProjectSelectDisjuntorType>
-                <option selected disabled>Tipo de disjuntor</option>
+              <NewProjectSelectDisjuntorType value={selectedDisjuntorType} onChange={handleDisjuntorTypeChange}>
                 {disjuntores.map((disjuntor) => (
-                  <option key={disjuntor.value} value={disjuntor.value}>
+                  <option
+                    key={disjuntor.value}
+                    value={disjuntor.value}
+                    disabled={selectedDisjuntorType !== 'Tipo de disjuntor' && disjuntor.value === 'Tipo de disjuntor'}
+                  >
                     {disjuntor.value}
                   </option>
                 ))}
               </NewProjectSelectDisjuntorType>
-              <NewProjectSelectDisjuntorValue >
-                <option selected disabled>Valor do disjuntor</option>
+              <NewProjectSelectDisjuntorValue value={selectedDisjuntorValue} onChange={handleDisjuntorValueChange}>
                 {valorDoDisjuntores.map((valor) => (
-                  <option key={valor.value} value={valor.value} >
+                  <option
+                    key={valor.value}
+                    value={valor.value}
+                    disabled={selectedDisjuntorValue !== 'Valor do disjuntor' && valor.value === 'Valor do disjuntor'}
+                  >
                     {valor.value}
                   </option>
                 ))}
@@ -124,10 +196,13 @@ const NovoProjeto = () => {
               <NewProjectLatitudeInput type="text" name="latitude" placeholder="Latitude do projeto" />
               <NewProjectLongitudeInput type="text" name="longitude" placeholder="Longitude do projeto" />
             </NewProjectLatitudeELongitudeContainer>
-            <NewProjectSelectTitularidade >
-              <option selected disabled>Trocar titularidade?</option>
+            <NewProjectSelectTitularidade value={selectedTitularidade} onChange={handleTitularidadeChange}>
               {titularidade.map((titularidade) => (
-                <option key={titularidade.value} value={titularidade.value}>
+                <option
+                  key={titularidade.value}
+                  value={titularidade.value}
+                  disabled={selectedTitularidade !== 'Trocar titularidade?' && titularidade.value === 'Trocar titularidade?'}
+                >
                   {titularidade.value}
                 </option>
               ))}
@@ -136,10 +211,16 @@ const NovoProjeto = () => {
           <NewProjectSection>
             <NewProjectDetailsText>Especificações do projeto</NewProjectDetailsText>
             <input type="text" placeholder='Potência total do projeto em kWp' />
-            <NewProjectSelectMaterial >
-              <option selected disabled>Possui os materias?</option>
-              <option value="Sim">Sim</option>
-              <option value="Não">Não</option>
+            <NewProjectSelectMaterial value={selectedMaterial} onChange={handleMaterialChange}>
+              {material.map((material) => (
+                <option
+                  key={material.value}
+                  value={material.value}
+                  disabled={selectedMaterial !== 'Possui os materiais?' && material.value === 'Possui os materiais?'}
+                >
+                  {material.value}
+                </option>
+              ))}
             </NewProjectSelectMaterial>
           </NewProjectSection>
           <NewProjectSection>
