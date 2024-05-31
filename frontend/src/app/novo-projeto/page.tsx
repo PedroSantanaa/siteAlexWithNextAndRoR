@@ -79,6 +79,33 @@ const NovoProjeto = () => {
   const handleMaterialChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedMaterial(e.target.value);
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    files.forEach((file, index) => {
+      formData.append(`file${index + 1}`, file);
+    });
+
+    try {
+      const response = await fetch('/your-endpoint', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        // Handle success
+        console.log('Files uploaded successfully');
+      } else {
+        // Handle error
+        console.error('Error uploading files');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
   const states = [
     { value: "Estado" },
     { value: "AC" },
@@ -260,7 +287,7 @@ const NovoProjeto = () => {
               ))}
             </NewProjectSelectMaterial>
           </NewProjectSection>
-          <NewProjectSubmitButton>Enviar Projeto</NewProjectSubmitButton>
+          <NewProjectSubmitButton type='submit' onClick={handleSubmit}>Enviar Projeto</NewProjectSubmitButton>
         </NewProjectInfoFormContainer>
       </NewProjectContainer>
     </Container>
