@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
     @project = current_user.projects.build(project_params)
 
     if @project.save
-      render json: @project, status: :created, location: @project
+      render json: @project, status: :created, location: @project, notice: "Project created"
     else
       render json: @project.errors, status: :unprocessable_entity
     end
@@ -53,6 +53,6 @@ class ProjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def project_params
-      params.require(:project).permit(:name, :user_id,:category_id)
+      params.require(:project).permit(:name, :user_id,:category_id, :estado, :concessionaria, :cpf, :cnpj, :tipo_disjuntor, :valor_disjuntor, :latitude, :longitude, :total_power, documents: [])
     end
 end
