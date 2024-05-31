@@ -11,7 +11,6 @@ import {
   NewProjectHeaderLine,
   NewProjectHeaderSubtitle,
   NewProjectHeaderTitle,
-  NewProjectInfoContainer,
   NewProjectInput,
   NewProjectNomeorRazaoSocialInput,
   NewProjectSection,
@@ -28,7 +27,9 @@ import {
   NewProjectLatitudeELongitudeContainer,
   NewProjectTotalPowerInput,
   NewProjectFileUploadInput,
-  NewProjectUploadLabel
+  NewProjectUploadLabel,
+  NewProjectInfoFormContainer,
+  NewProjectSubmitButton
 } from '../styled-components/NewProject'
 import { ChangeEvent, useState } from 'react'
 import Image from 'next/image'
@@ -42,8 +43,22 @@ const NovoProjeto = () => {
   const [selectedMaterial, setSelectedMaterial] = useState<string>('Possui os materiais?');
   const [fileNameType, setFileNameType] = useState<string>('');
   const [fileNameCONTRATO, setFileNameCONTRATO] = useState<string>('');
+  const [fileNamePower, setFileNamePower] = useState<string>('');
+  const [files, setFiles] = useState<File[]>([]);
   
   const { currentUser, loading, error } = useFetchCurrentUser()
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  if (e.target.files) {
+    const newFiles = Array.from(e.target.files);
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+
+    // Update file names for display purposes
+    if (e.target.id === 'file1') setFileNameType(newFiles[0].name);
+    if (e.target.id === 'file2') setFileNameCONTRATO(newFiles[0].name);
+    if (e.target.id === 'file3') setFileNamePower(newFiles[0].name);
+  }
+};
 
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedState(e.target.value);
@@ -64,21 +79,6 @@ const NovoProjeto = () => {
   const handleMaterialChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedMaterial(e.target.value);
   };
-
-  const handleFileChangeType = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      setFileNameType(file.name); // Atualiza o estado com o nome do arquivo selecionado
-    }
-  };
-  
-  const handleFileChangeCONTRATO = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      setFileNameCONTRATO(file.name); // Atualiza o estado com o nome do arquivo selecionado
-    }
-  };
-
   const states = [
     { value: "Estado" },
     { value: "AC" },
@@ -157,7 +157,7 @@ const NovoProjeto = () => {
           <NewProjectHeaderSubtitle>Crie um novo projeto de forma rápida</NewProjectHeaderSubtitle>
           <NewProjectHeaderLine />
         </NewProjectHeader>
-        <NewProjectInfoContainer>
+        <NewProjectInfoFormContainer>
           <NewProjectSection>
             <NewProjectDetailsText>Informações da Concessionária</NewProjectDetailsText>
             <NewProjectSelectContainer>
@@ -178,8 +178,8 @@ const NovoProjeto = () => {
           <NewProjectSection>
             <NewProjectDetailsText>Informações do Cliente</NewProjectDetailsText>
             <NewProjectTypeOfPersonButtonContainer>
-              <NewProjectTypeOfPersonButton onClick={() => setTypeOfPerson('Pessoa Fisica')} $isactive={typeOfPerson === 'Pessoa Fisica'}>Pessoa Fisica</NewProjectTypeOfPersonButton>
-              <NewProjectTypeOfPersonButton onClick={() => setTypeOfPerson('Pessoa Juridica')} $isactive={typeOfPerson === 'Pessoa Juridica'}>Pessoa Juridica</NewProjectTypeOfPersonButton>
+              <NewProjectTypeOfPersonButton type='button' onClick={() => setTypeOfPerson('Pessoa Fisica')} $isactive={typeOfPerson === 'Pessoa Fisica'}>Pessoa Fisica</NewProjectTypeOfPersonButton>
+              <NewProjectTypeOfPersonButton type='button' onClick={() => setTypeOfPerson('Pessoa Juridica')} $isactive={typeOfPerson === 'Pessoa Juridica'}>Pessoa Juridica</NewProjectTypeOfPersonButton>
             </NewProjectTypeOfPersonButtonContainer>
             <NewProjectCPFOrCNPJContainer>
               <NewProjectCPFOrCNPJInput type='text' name='numberOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'CPF' : 'CNPJ'} />
@@ -188,14 +188,14 @@ const NovoProjeto = () => {
             <NewProjectUploadLabel htmlFor='file1'>
               <Image src={'upload.svg'} alt={'upload'} width={50} height={50} />
               {fileNameType ? fileNameType : (typeOfPerson === 'Pessoa Fisica' ? 'DOCUMENTO COM FOTO' : 'DOCUMENTO COM FOTO DO REPRESENTANTE')}</NewProjectUploadLabel>
-            <NewProjectFileUploadInput type='file' name='file' id='file1' onChange={handleFileChangeType} />
+            <NewProjectFileUploadInput type='file' name='file' id='file1' onChange={handleFileChange} />
             {typeOfPerson === 'Pessoa Juridica' &&  (
               <>
                 <NewProjectUploadLabel htmlFor='file2'>
                   <Image src={'upload.svg'} alt={'upload'} width={50} height={50} />
                   {fileNameCONTRATO ? fileNameCONTRATO : 'Contrato Social'}
                 </NewProjectUploadLabel>
-                <NewProjectFileUploadInput type='file' name='file2' id='file2' onChange={handleFileChangeCONTRATO} />
+                <NewProjectFileUploadInput type='file' name='file2' id='file2' onChange={handleFileChange} />
               </>
             )}
           </NewProjectSection>
@@ -240,6 +240,10 @@ const NovoProjeto = () => {
                 </option>
               ))}
             </NewProjectSelectTitularidade>
+              <NewProjectUploadLabel htmlFor='file3'>
+              <Image src={'upload.svg'} alt={'upload'} width={50} height={50} />
+              {fileNamePower ? fileNamePower : "CONTA DE ENERGIA"}</NewProjectUploadLabel>
+            <NewProjectFileUploadInput type='file' name='file' id='file3' onChange={handleFileChange} />
           </NewProjectSection>
           <NewProjectSection>
             <NewProjectDetailsText>Especificações do projeto</NewProjectDetailsText>
@@ -256,10 +260,8 @@ const NovoProjeto = () => {
               ))}
             </NewProjectSelectMaterial>
           </NewProjectSection>
-          <NewProjectSection>
-            <NewProjectDetailsText>Documentos complementares (opcional)</NewProjectDetailsText>
-          </NewProjectSection>
-        </NewProjectInfoContainer>
+          <NewProjectSubmitButton>Enviar Projeto</NewProjectSubmitButton>
+        </NewProjectInfoFormContainer>
       </NewProjectContainer>
     </Container>
   )

@@ -28,7 +28,7 @@ export const NewProjectHeaderLine = styled.div`
   margin-top: 6px;
 `;
 
-export const NewProjectInfoContainer = styled.div `
+export const NewProjectInfoFormContainer = styled.form `
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -75,7 +75,7 @@ export const NewProjectTypeOfPersonButtonContainer = styled.div `
 export const NewProjectTypeOfPersonButton = styled.button<{ $isactive?: boolean; }>`
   padding: 10px;
   border: 1px solid #ccc;
-    background-color: ${({ $isactive }) => $isactive ? '#007bff' : 'transparent'};
+    background-color: ${({ $isactive }) => $isactive ? '#0a264c' : 'transparent'};
     color: ${({ $isactive }) => $isactive ? '#fff' : '#374151'};
     border-radius: 4px;
     cursor: pointer;
@@ -163,6 +163,7 @@ export const NewProjectSelectTitularidade = styled.select `
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-bottom: 10px;
 `;
 
 export const NewProjectSelectMaterial = styled.select `
@@ -178,4 +179,15 @@ export const NewProjectTotalPowerInput = styled.input `
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-bottom: 10px;
+`;
+
+export const NewProjectSubmitButton = styled.button `
+  width: 100%;
+  padding: 10px;
+  background-color: #0a264c;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 10px;
+  cursor: pointer;
 `;
