@@ -33,9 +33,17 @@ import {
 } from '../styled-components/NewProject'
 import { ChangeEvent, useState } from 'react'
 import Image from 'next/image'
+import apiInstance from '@/utils/axios'
+import { Response } from '@/actions'
 
 const NovoProjeto = () => {
   const [typeOfPerson, setTypeOfPerson] = useState('Pessoa Fisica')
+  const [nameOf, setNameOf] = useState('')
+  const [numberOf, setNumberOf] = useState('')
+  const [latitude, setLatitude] = useState('')
+  const [longitude, setLongitude] = useState('')
+  const [concessionaria, setConcessionaria] = useState('')
+  const [totalPowerInput, setTotalPowerInput] = useState('')
   const [selectedState, setSelectedState] = useState<string>('Estado');
   const [selectedDisjuntorType, setSelectedDisjuntorType] = useState<string>('Tipo de disjuntor');
   const [selectedDisjuntorValue, setSelectedDisjuntorValue] = useState<string>('Valor do disjuntor');
@@ -45,8 +53,11 @@ const NovoProjeto = () => {
   const [fileNameCONTRATO, setFileNameCONTRATO] = useState<string>('');
   const [fileNamePower, setFileNamePower] = useState<string>('');
   const [files, setFiles] = useState<File[]>([]);
+  const [errorCreate, setErrorCreate] = useState<string>('');
+  const [successCreate, setSuccessCreate] = useState<string>('');
+
   
-  const { currentUser, loading, error } = useFetchCurrentUser()
+  const { currentUser, loading, error, jwt } = useFetchCurrentUser()
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
   if (e.target.files) {
@@ -80,29 +91,73 @@ const NovoProjeto = () => {
     setSelectedMaterial(e.target.value);
   };
 
+  const handleNameOfChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setNameOf(e.target.value);
+  };
+
+  const handleNumberOfChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setNumberOf(e.target.value);
+  };
+
+  const handleLatitudeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setLatitude(e.target.value);
+  };
+
+  const handleLongitudeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setLongitude(e.target.value);
+  };
+  
+  const handleConcessionariaChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setConcessionaria(e.target.value);
+  };
+
+  const handleTotalPowerChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTotalPowerInput(e.target.value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    var cpf = '';
+    var cnpj = '';
+    if (typeOfPerson === 'Pessoa Fisica'){
+      cpf = numberOf;
+      var name = nameOf;
+    } else {
+      cnpj = numberOf;
+      var name = nameOf;
+    }
+    console.log(files);
 
-    const formData = new FormData();
-    files.forEach((file, index) => {
-      formData.append(`file${index + 1}`, file);
-    });
+    const requestData = {
+      "project":{
+        name: name,
+        cpf: cpf,
+        cnpj: cnpj,
+        estado: selectedState,
+        concessionaria: concessionaria,
+        latitude: latitude,
+        longitude: longitude,
+        tipo_disjuntor: selectedDisjuntorType,
+        valor_disjuntor: selectedDisjuntorValue,
+        total_power: totalPowerInput,
+        documents: files }}
 
     try {
-      const response = await fetch('/your-endpoint', {
-        method: 'POST',
-        body: formData,
-      });
+      const response:Response = await apiInstance.post('http://localhost:3001/projects', requestData, {
+      headers: {
+        'Authorization': `Bearer ${jwt}`
+      }
+    });
 
-      if (response.ok) {
+      if (response.status === 200) {
         // Handle success
-        console.log('Files uploaded successfully');
+        setSuccessCreate('Projeto criado com sucesso')
       } else {
         // Handle error
-        console.error('Error uploading files');
+        setErrorCreate('Ocorreu um erro, tente novamente em instantes')
       }
     } catch (error) {
-      console.error('Error:', error);
+      setErrorCreate('Ocorreu um erro, tente novamente em instantes')
     }
   };
   
@@ -199,7 +254,7 @@ const NovoProjeto = () => {
                   </option>
                 ))}
               </NewProjectSelect>
-              <NewProjectInput type='text' name='concessionaria' placeholder='Digite a concessionária'></NewProjectInput>
+              <NewProjectInput type='text' name='concessionaria' placeholder='Digite a concessionária' value={concessionaria} onChange={handleConcessionariaChange} />
             </NewProjectSelectContainer>
           </NewProjectSection>
           <NewProjectSection>
@@ -209,8 +264,8 @@ const NovoProjeto = () => {
               <NewProjectTypeOfPersonButton type='button' onClick={() => setTypeOfPerson('Pessoa Juridica')} $isactive={typeOfPerson === 'Pessoa Juridica'}>Pessoa Juridica</NewProjectTypeOfPersonButton>
             </NewProjectTypeOfPersonButtonContainer>
             <NewProjectCPFOrCNPJContainer>
-              <NewProjectCPFOrCNPJInput type='text' name='numberOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'CPF' : 'CNPJ'} />
-              <NewProjectNomeorRazaoSocialInput type='text' name='nameOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'nome' : 'razao social'} />
+              <NewProjectCPFOrCNPJInput type='text' name='numberOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'CPF' : 'CNPJ'} value={numberOf} onChange={handleNumberOfChange} />
+              <NewProjectNomeorRazaoSocialInput type='text' name='nameOf' placeholder={typeOfPerson === 'Pessoa Fisica' ? 'nome' : 'razao social'} value={nameOf} onChange={handleNameOfChange} />
             </NewProjectCPFOrCNPJContainer>
             <NewProjectUploadLabel htmlFor='file1'>
               <Image src={'upload.svg'} alt={'upload'} width={50} height={50} />
@@ -253,8 +308,8 @@ const NovoProjeto = () => {
               </NewProjectSelectDisjuntorValue>
             </NewProjectDisjuntorContainer>
             <NewProjectLatitudeELongitudeContainer>
-              <NewProjectLatitudeInput type="text" name="latitude" placeholder="Latitude do projeto" />
-              <NewProjectLongitudeInput type="text" name="longitude" placeholder="Longitude do projeto" />
+              <NewProjectLatitudeInput type="text" name="latitude" placeholder="Latitude do projeto" value={latitude} onChange={handleLatitudeChange} />
+              <NewProjectLongitudeInput type="text" name="longitude" placeholder="Longitude do projeto" value={longitude} onChange={handleLongitudeChange} />
             </NewProjectLatitudeELongitudeContainer>
             <NewProjectSelectTitularidade value={selectedTitularidade} onChange={handleTitularidadeChange}>
               {titularidade.map((titularidade) => (
@@ -274,7 +329,7 @@ const NovoProjeto = () => {
           </NewProjectSection>
           <NewProjectSection>
             <NewProjectDetailsText>Especificações do projeto</NewProjectDetailsText>
-            <NewProjectTotalPowerInput type="text" placeholder='Potência total do projeto em kWp' />
+            <NewProjectTotalPowerInput type="text" placeholder='Potência total do projeto em kWp' value={totalPowerInput} onChange={handleTotalPowerChange} />
             <NewProjectSelectMaterial value={selectedMaterial} onChange={handleMaterialChange}>
               {material.map((material) => (
                 <option

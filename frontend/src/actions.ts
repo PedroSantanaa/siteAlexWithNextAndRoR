@@ -5,7 +5,7 @@ import { cookies } from "next/headers"
 import apiInstance from "./utils/axios"
 import { redirect } from "next/navigation"
 
-interface Response {
+export interface Response {
   headers: Headers;
   status: number;
   // Outras propriedades da sua resposta HTTP

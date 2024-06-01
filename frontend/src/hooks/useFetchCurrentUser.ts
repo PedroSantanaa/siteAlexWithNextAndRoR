@@ -27,7 +27,7 @@ export const useFetchCurrentUser = () => {
   const [currentUser, setCurrentUser] = useState<User>();
   const [error, setError] = useState<string | null >(null);
   const [loading, setLoading] = useState<boolean | null >(null);
-
+  const [jwt, setJwt] = useState<string | false >(false);
   useEffect(() => {
     async function loadData() {
       setLoading(true);
@@ -37,6 +37,7 @@ export const useFetchCurrentUser = () => {
       }
 
       const jwt = await getJwt();
+      setJwt(jwt);
       if (jwt === false) {
         setError("Usuário nao atenticado");
         setLoading(false);
@@ -50,5 +51,5 @@ export const useFetchCurrentUser = () => {
     loadData();
   }, []);
 
-  return { currentUser, loading, error };
+  return { currentUser, loading, error, jwt };
 };
