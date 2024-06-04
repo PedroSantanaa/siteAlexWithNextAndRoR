@@ -9,12 +9,12 @@ class ProjectsController < ApplicationController
                 when 0 then current_user.projects
     end
 
-    render json: @projects
+    render json: @projects, each_serializer: ProjectSerializer, status: :ok
   end
 
   # GET /projects/1
   def show
-    render json: @project
+    render json: @project, serializer: ProjectSerializer, status: :ok
   end
 
   # POST /projects
@@ -53,6 +53,6 @@ class ProjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def project_params
-      params.require(:project).permit(:name, :user_id,:estado, :concessionaria, :cpf, :cnpj, :tipo_disjuntor, :valor_disjuntor, :latitude, :longitude, :total_power, documents: [])
+      params.require(:project).permit(:name, :user_id,:estado, :concessionaria, :cpf, :cnpj, :tipo_disjuntor, :valor_disjuntor, :latitude, :longitude, :total_power, documents_attributes: [:file])
     end
 end

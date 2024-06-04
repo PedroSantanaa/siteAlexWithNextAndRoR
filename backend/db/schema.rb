@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_01_022947) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_04_113314) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -64,6 +64,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_01_022947) do
     t.index ["user_id"], name: "index_companies_on_user_id"
   end
 
+  create_table "documents", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.string "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_documents_on_project_id"
+  end
+
   create_table "projects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -109,5 +117,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_01_022947) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "companies", "users"
+  add_foreign_key "documents", "projects"
   add_foreign_key "projects", "users"
 end
