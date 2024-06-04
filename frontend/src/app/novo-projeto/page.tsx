@@ -126,25 +126,40 @@ const NovoProjeto = () => {
       cnpj = numberOf;
       var name = nameOf;
     }
-    console.log(files);
 
-    const requestData = {
-      "project":{
-        name: name,
-        cpf: cpf,
-        cnpj: cnpj,
-        estado: selectedState,
-        concessionaria: concessionaria,
-        latitude: latitude,
-        longitude: longitude,
-        tipo_disjuntor: selectedDisjuntorType,
-        valor_disjuntor: selectedDisjuntorValue,
-        total_power: totalPowerInput,
-        documents: files }}
+    const formData = new FormData();
+    formData.append('project[name]', name);
+    formData.append('project[cpf]', cpf);
+    formData.append('project[cnpj]', cnpj);
+    formData.append('project[estado]', selectedState);
+    formData.append('project[concessionaria]', concessionaria);
+    formData.append('project[latitude]', latitude);
+    formData.append('project[longitude]', longitude);
+    formData.append('project[tipo_disjuntor]', selectedDisjuntorType);
+    formData.append('project[valor_disjuntor]', selectedDisjuntorValue);
+    formData.append('project[total_power]', totalPowerInput);
+
+    files.forEach((file, index) => {
+      formData.append(`project[documents_attributes][${index}][file]`, file);
+    });
+    // const requestData = {
+    //   "project":{
+    //     name: name,
+    //     cpf: cpf,
+    //     cnpj: cnpj,
+    //     estado: selectedState,
+    //     concessionaria: concessionaria,
+    //     latitude: latitude,
+    //     longitude: longitude,
+    //     tipo_disjuntor: selectedDisjuntorType,
+    //     valor_disjuntor: selectedDisjuntorValue,
+    //     total_power: totalPowerInput,
+    //     documents: files }}
 
     try {
-      const response:Response = await apiInstance.post('http://localhost:3001/projects', requestData, {
+      const response:Response = await apiInstance.post('http://localhost:3001/projects', formData, {
       headers: {
+        'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${jwt}`
       }
     });
