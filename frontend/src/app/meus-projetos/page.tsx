@@ -1,4 +1,5 @@
 'use client'
+import { format } from 'date-fns';
 import React, { ChangeEvent, useState} from 'react'
 import { Project, useFetchProjects } from '@/hooks/useFetchProjects';
 import {  FilterSearch, FilterSearchInput, FilterSelectOption, FiltersContainer, FiltersForm, FiltersFormFieldSelect, ProjectListHeaderP, ProjectsList, ProjectsListHeader, ProjectsListHeaderFilterCenter, ProjectsListHeaderFilterLeft, ProjectsListHeaderFilterRight, ProjectsListHeaderFilters, ProjectsListHeaderTitle, ProjectsListProject, ProjectsListProjectHeader } from '../styled-components/MyProjects';
@@ -91,10 +92,19 @@ const MyProjects = () => {
         {filteredProjects.map((project:Project) => (
           <ProjectsListProject key={project.id}>
             <ProjectsListProjectHeader>{project.name}</ProjectsListProjectHeader>
-            <p>Criado em: {project.created_at}</p>
-            <p>Atualizado em: {project.updated_at}</p>
-            <p>ID do usuário: {project.user_id}</p>
-            <p>ID da categoria: {project.category_id}</p>
+            <p>Criado em: {format(new Date(project.created_at), 'yyyy-MM-dd')}</p>
+            <p>Atualizado em: {format(new Date(project.updated_at), 'yyyy-MM-dd')}</p>
+            <p>Concessionária: {project.concessionaria}</p>
+            <p>CPF: {project.cpf}</p>
+            <p>CNPJ: {project.cnpj}</p>
+            <p>Estado: {project.estado}</p>
+            <p>Latitude: {project.latitude}</p>
+            <p>Longitude: {project.longitude}</p>
+            <p>Tipo de disjuntor: {project.tipo_disjuntor}</p>
+            <p>Valor de disjuntor: {project.valor_disjuntor}</p>
+            <p>Total de energia: {project.total_power}</p>
+            <p>Status: {project.status}</p>
+            <button>Visualizar</button>
           </ProjectsListProject>
         ))}
       </ProjectsList>

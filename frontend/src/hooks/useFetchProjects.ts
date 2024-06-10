@@ -13,7 +13,16 @@ export interface Project {
   created_at: string,
   updated_at: string,
   user_id: number,
-  category_id:number
+  concessionaria: string,
+  cpf: string,
+  cnpj: string,
+  estado: string,
+  latitude: number,
+  longitude: number,
+  tipo_disjuntor: string,
+  valor_disjuntor:string,
+  total_power:number,
+  status: string,
 }
 export const useFetchProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
