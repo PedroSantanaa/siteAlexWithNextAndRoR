@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 
 export interface Project {
   id: number,
+  role:number,
   name: string,
   created_at: string,
   updated_at: string,
@@ -23,6 +24,7 @@ export interface Project {
   valor_disjuntor:string,
   total_power:number,
   status: string,
+  documents: File[]
 }
 export const useFetchProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -49,7 +51,6 @@ export const useFetchProjects = () => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-
       setProjects(response.data);
       setLoading(false);
     } catch (error: any) {

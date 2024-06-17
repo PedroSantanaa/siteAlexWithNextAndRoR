@@ -9,7 +9,7 @@ dotenv.config();
 interface User {
   id: number,
   email: string,
-  role: string,
+  role: number,
   name: string,
   cep: string,
   estado: string,

@@ -57,7 +57,7 @@ const NovoProjeto = () => {
   const [successCreate, setSuccessCreate] = useState<string>('');
 
   
-  const { currentUser, loading, error, jwt } = useFetchCurrentUser()
+  const { jwt } = useFetchCurrentUser()
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
   if (e.target.files) {

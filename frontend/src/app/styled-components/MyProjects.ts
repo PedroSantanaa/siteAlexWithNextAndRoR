@@ -121,3 +121,43 @@ export const FilterSearchInput = styled.input`
   outline: none;
   padding: 10px;
 `;
+
+export const ProjectsTable = styled.div`
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+export const ProjectsRow = styled.div`
+  display: table-row;
+  &:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+`;
+
+export const ProjectsCell = styled.div`
+  display: table-cell;
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+`;
+
+export const ProjectsHeader = styled(ProjectsCell)`
+  font-weight: bold;
+  background-color: #0a264c;
+  color: white;
+`;
+
+export const ViewButton = styled.button`
+  background-color: #0a264c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+`;

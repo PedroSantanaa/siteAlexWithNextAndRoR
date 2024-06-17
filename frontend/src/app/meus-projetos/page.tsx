@@ -2,15 +2,44 @@
 import { format } from 'date-fns';
 import React, { ChangeEvent, useState} from 'react'
 import { Project, useFetchProjects } from '@/hooks/useFetchProjects';
-import {  FilterSearch, FilterSearchInput, FilterSelectOption, FiltersContainer, FiltersForm, FiltersFormFieldSelect, ProjectListHeaderP, ProjectsList, ProjectsListHeader, ProjectsListHeaderFilterCenter, ProjectsListHeaderFilterLeft, ProjectsListHeaderFilterRight, ProjectsListHeaderFilters, ProjectsListHeaderTitle, ProjectsListProject, ProjectsListProjectHeader } from '../styled-components/MyProjects';
+import {  FilterSearch, FilterSearchInput, FilterSelectOption, FiltersContainer, FiltersForm, FiltersFormFieldSelect, ProjectListHeaderP, ProjectsCell, ProjectsHeader, ProjectsList, ProjectsListHeader, ProjectsListHeaderFilterCenter, ProjectsListHeaderFilterLeft, ProjectsListHeaderFilterRight, ProjectsListHeaderFilters, ProjectsListHeaderTitle, ProjectsListProject, ProjectsListProjectHeader, ProjectsRow, ProjectsTable, ViewButton } from '../styled-components/MyProjects';
 import { Container, Loading } from '../styled-components/GeneralStyle';
 import LoadingModal from '@/components/Modal';
+import ProjectModal from '@/components/ProjectModal';
+import apiInstance from '@/utils/axios';
+import { useFetchCurrentUser } from '@/hooks/useFetchCurrentUser';
 
 const MyProjects = () => {
   const { projects:apiData, loading, error } = useFetchProjects();
   const [filter, setFilter] = useState("Recentes");
   const [filterSelectValue, setFilterSelectValue] = useState("Filtros");
   const [filterSearchValue, setFilterSearchValue] = useState("");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const {currentUser, jwt } = useFetchCurrentUser();
+
+  const openModal = (project:Project) => {
+    setSelectedProject(project);
+  };
+
+  const closeModal = () => {
+    setSelectedProject(null);
+  };
+
+  const handleStatusChange = async (projectId: number, newStatus: string) => {
+    // Lógica para atualizar o status do projeto
+    try {
+      const response:Response = await apiInstance.put(`http://localhost:3001/projects/${projectId}`, 
+      {status: newStatus},
+      {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+      }
+    });
+     
+    } catch (error) {
+    }
+  };
 
   const handleFilterSelectOptionClick = (event:ChangeEvent<HTMLSelectElement>) => {
     setFilterSelectValue(event.target.value);
@@ -89,24 +118,65 @@ const MyProjects = () => {
             </ProjectsListHeaderFilters>
         </FiltersContainer>
         
-        {filteredProjects.map((project:Project) => (
-          <ProjectsListProject key={project.id}>
-            <ProjectsListProjectHeader>{project.name}</ProjectsListProjectHeader>
-            <p>Criado em: {format(new Date(project.created_at), 'yyyy-MM-dd')}</p>
-            <p>Atualizado em: {format(new Date(project.updated_at), 'yyyy-MM-dd')}</p>
-            <p>Concessionária: {project.concessionaria}</p>
-            <p>CPF: {project.cpf}</p>
-            <p>CNPJ: {project.cnpj}</p>
-            <p>Estado: {project.estado}</p>
-            <p>Latitude: {project.latitude}</p>
-            <p>Longitude: {project.longitude}</p>
-            <p>Tipo de disjuntor: {project.tipo_disjuntor}</p>
-            <p>Valor de disjuntor: {project.valor_disjuntor}</p>
-            <p>Total de energia: {project.total_power}</p>
-            <p>Status: {project.status}</p>
-            <button>Visualizar</button>
-          </ProjectsListProject>
+        <div>
+      <ProjectsTable>
+        <ProjectsRow>
+          <ProjectsHeader>Nome</ProjectsHeader>
+          <ProjectsHeader>Criado em</ProjectsHeader>
+          <ProjectsHeader>Atualizado em</ProjectsHeader>
+          <ProjectsHeader>Concessionária</ProjectsHeader>
+          <ProjectsHeader>CPF</ProjectsHeader>
+          <ProjectsHeader>CNPJ</ProjectsHeader>
+          <ProjectsHeader>Estado</ProjectsHeader>
+          <ProjectsHeader>Latitude</ProjectsHeader>
+          <ProjectsHeader>Longitude</ProjectsHeader>
+          <ProjectsHeader>Tipo de disjuntor</ProjectsHeader>
+          <ProjectsHeader>Valor de disjuntor</ProjectsHeader>
+          <ProjectsHeader>Total de energia</ProjectsHeader>
+          <ProjectsHeader>Status</ProjectsHeader>
+          <ProjectsHeader>Ação</ProjectsHeader>
+        </ProjectsRow>
+        {filteredProjects.map((project) => (
+          <ProjectsRow key={project.id}>
+            <ProjectsCell>{project.name}</ProjectsCell>
+            <ProjectsCell>{format(new Date(project.created_at), 'yyyy-MM-dd')}</ProjectsCell>
+            <ProjectsCell>{format(new Date(project.updated_at), 'yyyy-MM-dd')}</ProjectsCell>
+            <ProjectsCell>{project.concessionaria}</ProjectsCell>
+            <ProjectsCell>{project.cpf}</ProjectsCell>
+            <ProjectsCell>{project.cnpj}</ProjectsCell>
+            <ProjectsCell>{project.estado}</ProjectsCell>
+            <ProjectsCell>{project.latitude}</ProjectsCell>
+            <ProjectsCell>{project.longitude}</ProjectsCell>
+            <ProjectsCell>{project.tipo_disjuntor}</ProjectsCell>
+            <ProjectsCell>{project.valor_disjuntor}</ProjectsCell>
+            <ProjectsCell>{project.total_power}</ProjectsCell>
+            {currentUser?.role === 1 ? (
+              <ProjectsCell>
+                <select
+                  value={project.status}
+                  onChange={(e) => handleStatusChange(project.id, e.target.value)}
+                >
+                  <option value="novo">Novo</option>
+                  <option value="em analise">Em Análise</option>
+                  <option value="aguardando solicitação">Aguardando Solicitação</option>
+                  <option value="realizando vistoria">Realizando Vistoria</option>
+                  <option value="finalizado">Finalizado</option>
+                </select>
+              </ProjectsCell>
+              ) : (
+                <ProjectsCell>{project.status}</ProjectsCell>
+              )}
+            <ProjectsCell>
+              <ViewButton onClick={() => openModal(project)}>Visualizar</ViewButton>
+            </ProjectsCell>
+          </ProjectsRow>
         ))}
+      </ProjectsTable>
+
+      {selectedProject && (
+        <ProjectModal project={selectedProject} onClose={closeModal} />
+      )}
+    </div>
       </ProjectsList>
     </Container>
   );
