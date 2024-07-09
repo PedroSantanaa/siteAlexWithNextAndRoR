@@ -182,6 +182,4 @@ const MyProjects = () => {
   );
 };
 
-export default MyProjects
-
-
+export default MyProjects;

@@ -1,6 +1,11 @@
-// ProjectModal.tsx
 import React from 'react';
 import { CloseButton, ModalContent, ModalOverlay } from '@/app/styled-components/ProjectModal';
+
+interface Document {
+  id: number;
+  name: string;
+  url: string;
+}
 
 interface Project {
   id: number;
@@ -18,7 +23,7 @@ interface Project {
   valor_disjuntor: string;
   total_power: number;
   status: string;
-  documents: File[];
+  documents: Document[];
 }
 
 interface ProjectModalProps {
@@ -28,7 +33,7 @@ interface ProjectModalProps {
 
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
   if (!project) return null;
-  console.log(project);
+
   return (
     <ModalOverlay>
       <ModalContent>
@@ -49,8 +54,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
 
         <h3>Arquivos:</h3>
         <ul>
-          {project.documents.map((file, index) => (
-            <li key={index}>{file.name}</li>
+          {project.documents.map((file) => (
+            <li key={file.id}>
+              <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a>
+            </li>
           ))}
         </ul>
       </ModalContent>

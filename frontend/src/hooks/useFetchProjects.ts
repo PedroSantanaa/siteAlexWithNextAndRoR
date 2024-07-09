@@ -7,6 +7,12 @@ import { getJwt, getSession } from "@/actions";
 import { redirect } from "next/navigation";
 
 
+export interface Document {
+  id: number;
+  name: string;
+  url: string;
+}
+
 export interface Project {
   id: number,
   role:number,
@@ -24,7 +30,7 @@ export interface Project {
   valor_disjuntor:string,
   total_power:number,
   status: string,
-  documents: File[]
+  documents: Document[]
 }
 export const useFetchProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
