@@ -1,20 +1,21 @@
+# app/controllers/projects_controller.rb
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project, only: %i[ show update destroy ]
+  before_action :set_project, only: %i[show update destroy]
 
   # GET /projects
   def index
     @projects = case current_user.role
-                when 1 then Project.all
-                when 0 then current_user.projects
-    end
+                when 1 then Project.includes(:documents).all
+                when 0 then current_user.projects.includes(:documents)
+                end
 
-    render json: @projects, each_serializer: ProjectSerializer, status: :ok
+    render json: ProjectSerializer.new(@projects).serializable_hash.to_json, status: :ok
   end
 
   # GET /projects/1
   def show
-    render json: @project, serializer: ProjectSerializer, status: :ok
+    render json: ProjectSerializer.new(@project).serializable_hash.to_json, status: :ok
   end
 
   # POST /projects
@@ -22,7 +23,7 @@ class ProjectsController < ApplicationController
     @project = current_user.projects.build(project_params)
 
     if @project.save
-      render json: @project, status: :created, location: @project, notice: "Project created"
+      render json: ProjectSerializer.new(@project).serializable_hash.to_json, status: :created, location: @project
     else
       render json: @project.errors, status: :unprocessable_entity
     end
@@ -31,7 +32,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   def update
     if @project.update(project_params)
-      render json: @project
+      render json: ProjectSerializer.new(@project).serializable_hash.to_json
     else
       render json: @project.errors, status: :unprocessable_entity
     end
@@ -43,16 +44,15 @@ class ProjectsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project
-      @project = case current_user.role
-                  when 1 then Project.find(params[:id])
-                  when 0 then current_user.projects.find(params[:id])
-      end
-    end
 
-    # Only allow a list of trusted parameters through.
-    def project_params
-      params.require(:project).permit(:id, :name, :user_id,:estado, :concessionaria, :cpf, :cnpj, :tipo_disjuntor, :valor_disjuntor, :latitude, :longitude, :total_power, :status,  documents_attributes: [:file])
-    end
+  def set_project
+    @project = case current_user.role
+               when 1 then Project.find(params[:id])
+               when 0 then current_user.projects.find(params[:id])
+               end
+  end
+
+  def project_params
+    params.require(:project).permit(:id, :name, :user_id, :estado, :concessionaria, :cpf, :cnpj, :tipo_disjuntor, :valor_disjuntor, :latitude, :longitude, :total_power, :status, documents_attributes: [:file])
+  end
 end
