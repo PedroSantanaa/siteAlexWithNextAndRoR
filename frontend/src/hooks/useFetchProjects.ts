@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import apiInstance from "@/utils/axios";
 import { getJwt, getSession } from "@/actions";
 import { redirect } from "next/navigation";
+import { create } from 'domain';
 
 
 export interface Document {
@@ -57,7 +58,28 @@ export const useFetchProjects = () => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      setProjects(response.data);
+      const transformedProjects = response.data.data.map((item: any) => ({
+          id: item.attributes.id,
+          name: item.attributes.name,
+          cpf: item.attributes.cpf,
+          cnpj: item.attributes.cnpj,
+          estado: item.attributes.estado,
+          concessionaria: item.attributes.concessionaria,
+          latitude: item.attributes.latitude,
+          longitude: item.attributes.longitude,
+          tipo_disjuntor: item.attributes.tipo_disjuntor,
+          valor_disjuntor: item.attributes.valor_disjuntor,
+          total_power: item.attributes.total_power,
+          status: item.attributes.status,
+          created_at: item.attributes.created_at,
+          updated_at: item.attributes.updated_at,
+          documents: item.attributes.documents.map((doc: any) => ({
+            id: doc.id,
+            name: doc.name,
+            url: doc.url
+          }))
+        }));
+      setProjects(transformedProjects);
       setLoading(false);
     } catch (error: any) {
       setError(error.message);
@@ -68,6 +90,6 @@ export const useFetchProjects = () => {
   useEffect(() => {
     loadData();
   }, [loadData]);
-
+  console.log(projects);
   return { projects, loading, error };
 };

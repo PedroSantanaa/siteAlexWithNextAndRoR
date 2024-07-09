@@ -16,7 +16,6 @@ const MyProjects = () => {
   const [filterSearchValue, setFilterSearchValue] = useState("");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const {currentUser, jwt } = useFetchCurrentUser();
-
   const openModal = (project:Project) => {
     setSelectedProject(project);
   };
@@ -48,7 +47,7 @@ const MyProjects = () => {
   const handleFilterSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterSearchValue(e.target.value);
   };
-  const dadosFiltrados = apiData.filter((project) => {return (project.name.toLowerCase().includes(filterSearchValue.toLowerCase()))})
+  const dadosFiltrados = apiData.filter((project:Project) => {return (project.name.toLowerCase().includes(filterSearchValue.toLowerCase()))})
 
   const filteredProjects = dadosFiltrados.sort((a, b) => {
     if (filter === "A-Z") {
