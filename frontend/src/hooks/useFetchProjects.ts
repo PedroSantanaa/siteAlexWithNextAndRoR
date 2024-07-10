@@ -90,6 +90,5 @@ export const useFetchProjects = () => {
   useEffect(() => {
     loadData();
   }, [loadData]);
-  console.log(projects);
   return { projects, loading, error };
 };

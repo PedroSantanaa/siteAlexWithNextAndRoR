@@ -1,5 +1,6 @@
+// ProjectModal.tsx
 import React from 'react';
-import { CloseButton, ModalContent, ModalOverlay } from '@/app/styled-components/ProjectModal';
+import { CloseButton, ModalContent, ModalOverlay, FileLink, FileList, FileItem, FileActions, DownloadButton, OpenButton, Title, SectionTitle, ProjectInfo } from '@/app/styled-components/ProjectModal';
 
 interface Document {
   id: number;
@@ -12,7 +13,6 @@ interface Project {
   name: string;
   created_at: string;
   updated_at: string;
-  user_id: number;
   concessionaria: string;
   cpf: string;
   cnpj: string;
@@ -34,32 +34,55 @@ interface ProjectModalProps {
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
   if (!project) return null;
 
+  const baseUrl = process.env.RUBY_PUBLIC_API_URL || "http://localhost:3001";
+
+  const downloadFile = (file: Document) => {
+  const fileUrl = `${baseUrl}/${file.url}`;
+  fetch(fileUrl)
+    .then(response => response.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+};
+
   return (
     <ModalOverlay>
       <ModalContent>
         <CloseButton onClick={onClose}>Fechar</CloseButton>
-        <h2>{project.name}</h2>
-        <p>Criado em: {project.created_at}</p>
-        <p>Atualizado em: {project.updated_at}</p>
-        <p>Concessionária: {project.concessionaria}</p>
-        <p>CPF: {project.cpf}</p>
-        <p>CNPJ: {project.cnpj}</p>
-        <p>Estado: {project.estado}</p>
-        <p>Latitude: {project.latitude}</p>
-        <p>Longitude: {project.longitude}</p>
-        <p>Tipo de disjuntor: {project.tipo_disjuntor}</p>
-        <p>Valor de disjuntor: {project.valor_disjuntor}</p>
-        <p>Total de energia: {project.total_power}</p>
-        <p>Status: {project.status}</p>
-
-        <h3>Arquivos:</h3>
-        <ul>
+        <Title>{project.name}</Title>
+        <ProjectInfo>
+          <SectionTitle>Informações do Projeto</SectionTitle>
+          <p><strong>Criado em:</strong> {project.created_at}</p>
+          <p><strong>Atualizado em:</strong> {project.updated_at}</p>
+          <p><strong>Concessionária:</strong> {project.concessionaria}</p>
+          <p><strong>CPF:</strong> {project.cpf}</p>
+          <p><strong>CNPJ:</strong> {project.cnpj}</p>
+          <p><strong>Estado:</strong> {project.estado}</p>
+          <p><strong>Latitude:</strong> {project.latitude}</p>
+          <p><strong>Longitude:</strong> {project.longitude}</p>
+          <p><strong>Tipo de disjuntor:</strong> {project.tipo_disjuntor}</p>
+          <p><strong>Valor de disjuntor:</strong> {project.valor_disjuntor}</p>
+          <p><strong>Total de energia:</strong> {project.total_power}</p>
+          <p><strong>Status:</strong> {project.status}</p>
+        </ProjectInfo>
+        
+        <SectionTitle>Arquivos</SectionTitle>
+        <FileList>
           {project.documents.map((file) => (
-            <li key={file.id}>
-              <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a>
-            </li>
+            <FileItem key={file.id}>
+              <FileLink href={`${baseUrl}${file.url}`} target="_blank" rel="noopener noreferrer">{file.name}</FileLink>
+              <FileActions>
+                <OpenButton href={`${baseUrl}${file.url}`} target="_blank" rel="noopener noreferrer">Abrir</OpenButton>
+                <DownloadButton onClick={() => downloadFile(file)}>Baixar</DownloadButton>
+              </FileActions>
+            </FileItem>
           ))}
-        </ul>
+        </FileList>
       </ModalContent>
     </ModalOverlay>
   );

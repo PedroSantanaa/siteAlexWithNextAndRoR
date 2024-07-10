@@ -47,7 +47,17 @@ const MyProjects = () => {
   const handleFilterSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterSearchValue(e.target.value);
   };
-  const dadosFiltrados = apiData.filter((project:Project) => {return (project.name.toLowerCase().includes(filterSearchValue.toLowerCase()))})
+  const dadosFiltrados = apiData.filter((project: Project) => {
+    if (filterSelectValue === "Nome") {
+      return project.name.toLowerCase().includes(filterSearchValue.toLowerCase());
+    } else if (filterSelectValue === "CPF") {
+      return project.cpf && project.cpf.toLowerCase().includes(filterSearchValue.toLowerCase());
+    } else if (filterSelectValue === "CNPJ") {
+      return project.cnpj && project.cnpj.toLowerCase().includes(filterSearchValue.toLowerCase());
+    }
+    return true; // Caso não seja selecionado nenhum filtro específico, retorna todos os projetos
+  });
+
 
   const filteredProjects = dadosFiltrados.sort((a, b) => {
     if (filter === "A-Z") {
@@ -79,14 +89,17 @@ const MyProjects = () => {
         <FiltersContainer>
           <FiltersForm>
               <FiltersFormFieldSelect value={filterSelectValue} onChange={handleFilterSelectOptionClick}>
-                  <FilterSelectOption value="Filtro" >
-                    Filtro
+                  <FilterSelectOption value="Filtros" disabled={filterSelectValue !== "Filtros"}>
+                    Filtros
                   </FilterSelectOption>
                   <FilterSelectOption value="Nome">
                     Nome
                   </FilterSelectOption>
                   <FilterSelectOption value="CPF">
                     CPF
+                  </FilterSelectOption>
+                  <FilterSelectOption value="CNPJ">
+                    CNPJ
                   </FilterSelectOption>
               </FiltersFormFieldSelect>
             {filterSelectValue === "Nome" && (
@@ -105,6 +118,17 @@ const MyProjects = () => {
                     type="text"
                     value={filterSearchValue}
                     onChange={handleFilterSearchInputChange}
+                    placeholder='Digite o CPF'
+                  />
+                </FilterSearch>
+            )}
+            {filterSelectValue === "CNPJ" && (
+                <FilterSearch>
+                  <FilterSearchInput
+                    type="text"
+                    value={filterSearchValue}
+                    onChange={handleFilterSearchInputChange}
+                    placeholder='Digite o CNPJ'
                   />
                 </FilterSearch>
             )}
